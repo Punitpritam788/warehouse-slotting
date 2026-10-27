@@ -225,7 +225,7 @@ dict.js               data dictionary, foreign keys, DDL and markdown generators
 gen.js                CLI: generate, validate, write files, check reproducibility
 DATA_DICTIONARY.md    generated field reference
 PROMPTS.md            prompt history and AI disclosure
-PROMPT.md             three detailed prompts that reproduce this repo (written afterwards)
+PROMPT.md             one detailed prompt that reproduces this repo (written afterwards)
 data/starter/         all outputs for the starter scale
 data/full/            CSV + ground_truth.csv + manifest.json for the full scale
 ```

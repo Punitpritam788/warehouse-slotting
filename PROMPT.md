@@ -1,17 +1,17 @@
-# Prompts that reproduce this repo
+# Prompt that reproduces this repo
 
-These three prompts, given to an AI coding assistant in order, should produce a repo with the same behavior and structure as this one. They were written **after** the project was built, from what the final code does. They are not the prompts I actually used; those are in [`PROMPTS.md`](PROMPTS.md).
+One prompt, in three parts, to give an AI coding assistant in a single message (attach the project brief `attachment.txt` and the two YottaFlex PDFs). It was written **after** the project was built, from what the final code does. It is not the prompt history I actually used; that is in [`PROMPTS.md`](PROMPTS.md).
 
-Attach the project brief (`attachment.txt`) and the two YottaFlex PDFs to prompt 1. Run `node gen.js --full` after each prompt and do not move on while it exits non-zero.
+Tell the assistant to finish Part 1 and get `node gen.js --full` to exit 0 before starting Part 2.
 
-Expected results with the exact numbers below: 0 validation failures, 50 of 50 injected issues found, two runs identical. Row counts will match; metric values depend on the random stream, so small drift in the pick-distance, throughput and replenishment percentages is normal if the assistant orders its random calls differently.
+Expected with the exact numbers below: 0 validation failures, 50 of 50 injected issues found, two runs identical. Row counts will match. The pick-distance, throughput and replenishment percentages depend on the random stream, so small drift is normal if the assistant orders its random calls differently.
 
 ---
 
-## Prompt 1: data generator, rules, validation (Node, no dependencies)
-
 ```
-Build a dependency-free Node 18+ project in a new folder `warehouse-slotting` that generates synthetic warehouse slotting data per the attached brief. Use plain JavaScript files that also run in a browser (no `require` without a `typeof module` guard, use `globalThis.WS` for the browser namespace).
+You are building one repo end to end: a generator, a web page and documentation. Work through PARTS 1, 2 and 3 in order, run the checks named at the end of each part, and do not continue while a check fails.
+
+PART 1. Build a dependency-free Node 18+ project in a new folder `warehouse-slotting` that generates synthetic warehouse slotting data per the attached brief. Use plain JavaScript files that also run in a browser (no `require` without a `typeof module` guard, use `globalThis.WS` for the browser namespace).
 
 FILES
 - dict.js: the single source of truth. Export DICT (per table: pk, and fields as [name, type, required, unit, allowed, rule]), FKS (child, field, parent), ORDER (table order), ISSUES, toMarkdown() and toDDL() (SQLite-style CREATE TABLE with FKs plus a GroundTruth table).
@@ -43,14 +43,8 @@ VALIDATION (60+ checks, each reporting violations and an example id): PK uniquen
 Also write the SQL exporter (DDL then multi-row INSERTs, 500 rows each) and stage callbacks: 'Warehouses, zones, locations', 'SKUs', 'Orders and demand', 'Slotting both layouts', 'Pick events', 'Replenishment', 'Metrics on both layouts', 'Edge cases and validation'.
 
 Done when: `node gen.js` and `node gen.js --full --out data/full` exit 0, with row counts Location 10000, SKU 5000, OrderLine 100000, ground truth 50, and the second run identical to the first.
-```
 
----
-
-## Prompt 2: web UI (GitHub Pages ready, modern and classic layouts)
-
-```
-Add a static `index.html` that loads dict.js and engine.js, works on GitHub Pages and by opening the file, and needs no build step. Keep the generator code unchanged except for what is listed.
+PART 2. Add a static `index.html` that loads dict.js and engine.js, works on GitHub Pages and by opening the file, and needs no build step. Keep the generator code unchanged except for what is listed.
 
 BIG DATA
 - worker.js (importScripts dict.js, engine.js, session.js) and session.js (makeSession(post) used by both the worker and a main-thread fallback when `new Worker` fails, for example on file://). The worker keeps the generated database and posts only a summary: params, ms, reproducibility result (or null), per-table row counts and FNV checksums, metrics, validation report, ground-truth rows, detector counts by issue type, heatmap cells for the first warehouse (aisle, bay, level, picks under baseline, picks under optimized, -1 if empty), SKU mix. Support messages: run (with a verify flag that generates twice and compares every table's CSV), rows (paged slice), csv, sql. CSV and SQL are built only on request.
@@ -65,14 +59,8 @@ CLASSIC LAYOUT (same page, switch in the nav, remembered in localStorage and `?v
 - Reproduce the original plain page: title and sub line, one controls card (scale, seed, verify, Generate, Cancel, status), then stacked cards: Reproducibility, Tables (rows and checksums plus CSV/SQL chips), Baseline vs optimized table (7 rows with a Change column), Order lines per month bars, Validation (OK/FAIL list), Injected edge cases vs detector with the ground-truth table. System font, light #f6f5f1 / dark #161614 palette, blue accent. Both layouts' controls stay in sync.
 
 Test in headless Chromium: starter run completes, repro text appears, paging works, full run finishes while the page stays responsive, CSV download works, cancel works, file:// fallback works, no horizontal scroll at 400 px, no console errors.
-```
 
----
-
-## Prompt 3: documentation, honesty checks and publishing
-
-```
-Write the documentation and verify the repo against the brief and the YottaFlex guidelines.
+PART 3. Write the documentation and verify the repo against the brief and the YottaFlex guidelines.
 
 1. README.md: centered hero with an SVG banner (assets/banner.svg: dark gradient, a rack-grid heatmap where slots near a vertical DOCK bar are amber and far ones are blue/grey, title "Warehouse Slotting Lab"), static shields.io badges (node, dependencies 0, seed, reproducible, validation, anomaly detection, AI disclosure), a highlights row, quick start with every CLI flag, results table (copy the numbers from data/full/manifest.json, do not invent), Mermaid architecture and ER diagrams, data model notes (cardinalities, bridge table SlotAssignment, IDs, lifecycle), generation logic table, edge-case table with injection and detector rule, collapsible validation / assumptions / limitations, reproducibility, a section "Handling big data in the browser", an AI-use section pointing to PROMPTS.md, repo layout. State the weak spots honestly (for example peak-day capacity ratio is unstable across seeds; no deliberate exact-fit boundary case; single-SKU slots; Manhattan distance to one dock).
 2. PROMPTS.md: every prompt actually sent, verbatim, in order, plus where AI was used and how it was verified. Do not hide or remove any AI traces; the guidelines require disclosure. Leave a clearly marked place for the author to describe what they personally reviewed and changed.
