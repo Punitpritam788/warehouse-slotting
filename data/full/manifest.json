@@ -1,0 +1,901 @@
+{
+  "command": "node gen.js --full",
+  "scale": "full",
+  "params": {
+    "seed": 20261022,
+    "warehouses": 20,
+    "locations": 10000,
+    "skus": 5000,
+    "lines": 100000,
+    "inject": 10
+  },
+  "generated_with": "v22.23.4",
+  "source": "Fully synthetic; no external data used.",
+  "tables": {
+    "Warehouse": {
+      "rows": 20,
+      "fnv1a": "1a95e118",
+      "sha256": "eaca5e390629141b0f538fb32c61cfc50e49625bc401f1629b8f98f85d1b18ec"
+    },
+    "Zone": {
+      "rows": 80,
+      "fnv1a": "c47bd003",
+      "sha256": "13cf371a4316484703c5dbcff876796567f4915fde53cd415b1f8d84dee71248"
+    },
+    "Location": {
+      "rows": 10000,
+      "fnv1a": "743e1b68",
+      "sha256": "7100a7b747b589dc5c627bda2cf3b47b520e6ceaf64c91c6510d2a6f07b48759"
+    },
+    "SKU": {
+      "rows": 5000,
+      "fnv1a": "eb0e5226",
+      "sha256": "45d4e58a5f6014f317e7a1b507c9a9f1fb2497836df1f6d985ab4aea3f7ae1bb"
+    },
+    "SKUProfile": {
+      "rows": 5000,
+      "fnv1a": "3f6010b3",
+      "sha256": "133dec92b57cbf94d0e5388644b3ea50c761bd2fed6112ffa33fe31032405350"
+    },
+    "Order": {
+      "rows": 33485,
+      "fnv1a": "58ef9954",
+      "sha256": "0ebe52005da1d2f26961a03f1a3cc43f41fb82127ecf6ddb8b56b177b7f5879b"
+    },
+    "OrderLine": {
+      "rows": 100000,
+      "fnv1a": "c103ccce",
+      "sha256": "029d66f952a80a87f5d3b9e164ef94d9095dc94a2212a12a7ee2a3d2fc55b055"
+    },
+    "PickEvent": {
+      "rows": 100000,
+      "fnv1a": "014581aa",
+      "sha256": "8598edec0aab2e93d6c6f0a11a432ae581a3da8269e512aad342d9e31b01bd98"
+    },
+    "Replenishment": {
+      "rows": 39392,
+      "fnv1a": "86d0abaf",
+      "sha256": "73b34afcf9b36f20e2cab036271b92314cc55c66c8a1f03b8a6f67c4092262f3"
+    },
+    "SlotAssignment": {
+      "rows": 10030,
+      "fnv1a": "b7a9f3dd",
+      "sha256": "295d419cb5a3a9c4e0685a37892d2738b2b787d8b947e41deb251b8fd55c1cd8"
+    },
+    "AisleBlock": {
+      "rows": 70,
+      "fnv1a": "0f2c16a6",
+      "sha256": "f6b015fb83dfad206d6aa606cb111a0d5a666e55d48d12623f1ab81ba497b69f"
+    },
+    "GroundTruth": {
+      "rows": 50,
+      "fnv1a": "f6e8aeec",
+      "sha256": "53cff6b31fa7e410a6d26343e19b364caaacb4e2c06d157b0a8bfb548593467e"
+    }
+  },
+  "reproducibility": {
+    "regenerated_twice_same_seed": true,
+    "checksums_equal": true
+  },
+  "validation": {
+    "clean_before_injection": [
+      {
+        "name": "PK unique: Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: Zone",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: SKUProfile",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: Order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: OrderLine",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: PickEvent",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: Replenishment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: SlotAssignment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: AisleBlock",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: Zone",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: SKUProfile",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: Order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: OrderLine",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: PickEvent",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: Replenishment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: SlotAssignment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: AisleBlock",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Zone.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Location.zone_id -> Zone",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Location.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK SKU.home_warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK SKUProfile.sku_id -> SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Order.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK OrderLine.order_id -> Order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK OrderLine.sku_id -> SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK PickEvent.order_line_id -> OrderLine",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK PickEvent.order_id -> Order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK PickEvent.sku_id -> SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK PickEvent.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK PickEvent.location_id -> Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Replenishment.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Replenishment.sku_id -> SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Replenishment.location_id -> Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK SlotAssignment.sku_id -> SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK SlotAssignment.location_id -> Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK SlotAssignment.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK AisleBlock.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: Zone",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: Order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: PickEvent",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: SlotAssignment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: Replenishment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: AisleBlock",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Location: warehouse matches zone; volume & dock derived",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "SKUProfile: volume, oversized, picks_total derived",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "SKUProfile: velocity_class recomputes",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "SKUProfile: no cold+hazard mix",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Order: totals reconcile with lines; ship >= order date",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "OrderLine: SKU home warehouse = order warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "SlotAssignment: lifecycle (ACTIVE <=> no end date; end >= start); warehouse = location warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PickEvent: matches order line, warehouse, aisle, distance",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PickEvent: order_date <= picked_at <= shipped_date",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PickEvent: location/layout = a slot in force on picked_at",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Replenishment: labor_minutes derived; location = slot in force",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "AisleBlock: end >= start",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      }
+    ],
+    "detections_before_injection": 0,
+    "after_injection": [
+      {
+        "name": "PK unique: Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: Zone",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: SKUProfile",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: Order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: OrderLine",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: PickEvent",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: Replenishment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: SlotAssignment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PK unique: AisleBlock",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: Zone",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: SKUProfile",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: Order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: OrderLine",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: PickEvent",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: Replenishment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: SlotAssignment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Schema/enum/required: AisleBlock",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Zone.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Location.zone_id -> Zone",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Location.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK SKU.home_warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK SKUProfile.sku_id -> SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Order.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK OrderLine.order_id -> Order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK OrderLine.sku_id -> SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK PickEvent.order_line_id -> OrderLine",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK PickEvent.order_id -> Order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK PickEvent.sku_id -> SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK PickEvent.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK PickEvent.location_id -> Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Replenishment.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Replenishment.sku_id -> SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK Replenishment.location_id -> Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK SlotAssignment.sku_id -> SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK SlotAssignment.location_id -> Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK SlotAssignment.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "FK AisleBlock.warehouse_id -> Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: Warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: Zone",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: Location",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: SKU",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: Order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: PickEvent",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: SlotAssignment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: Replenishment",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "ID format: AisleBlock",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Location: warehouse matches zone; volume & dock derived",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "SKUProfile: volume, oversized, picks_total derived",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "SKUProfile: velocity_class recomputes",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "SKUProfile: no cold+hazard mix",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Order: totals reconcile with lines; ship >= order date",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "OrderLine: SKU home warehouse = order warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "SlotAssignment: lifecycle (ACTIVE <=> no end date; end >= start); warehouse = location warehouse",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PickEvent: matches order line, warehouse, aisle, distance",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PickEvent: order_date <= picked_at <= shipped_date",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "PickEvent: location/layout = a slot in force on picked_at",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "Replenishment: labor_minutes derived; location = slot in force",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "AisleBlock: end >= start",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      }
+    ]
+  },
+  "anomaly_detection_vs_ground_truth": {
+    "expected": 50,
+    "found": 50,
+    "true_positive": 50,
+    "false_positive": 0,
+    "false_negative": 0
+  },
+  "metrics": {
+    "baseline": {
+      "pick_lines": 100000,
+      "total_pick_distance_m": 4824659,
+      "avg_distance_per_line_m": 48.25,
+      "avg_distance_class_A_m": 48.44,
+      "replen_tasks": 39820,
+      "replen_labor_min": 273660,
+      "peak_day_labor_utilisation": 1.07,
+      "labor_hours": 6511.16,
+      "lines_per_labor_hour": 15.36
+    },
+    "optimized": {
+      "pick_lines": 100000,
+      "total_pick_distance_m": 2576864,
+      "avg_distance_per_line_m": 25.77,
+      "avg_distance_class_A_m": 22.01,
+      "replen_tasks": 40409,
+      "replen_labor_min": 253543,
+      "peak_day_labor_utilisation": 0.97,
+      "labor_hours": 5655.55,
+      "lines_per_labor_hour": 17.68
+    },
+    "assumptions": "walk 1.2 m/s, 30 s handling per line, round trip to dock, replen = 5 + 0.1*qty + 0.05*dock_m min",
+    "delta_pct": {
+      "distance": -46.59,
+      "class_A_distance": -54.56,
+      "replen_tasks": 1.48,
+      "replen_labor": -7.35,
+      "throughput": 15.1
+    },
+    "monthly_lines": [
+      7927,
+      7304,
+      16160,
+      8146,
+      8241,
+      8089,
+      8173,
+      8063,
+      16184,
+      11713,
+      0,
+      0
+    ],
+    "velocity_mix": {
+      "A": 1814,
+      "B": 1833,
+      "C": 1353
+    }
+  }
+}

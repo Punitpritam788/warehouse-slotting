@@ -1,0 +1,51 @@
+issue_id,issue_type,entity_type,entity_id,note
+ISS-0001,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-010001,SKU-002627 41.6x45.8x54.7cm 13.96kg exceeds LOC-Z041-005109 60x60x50cm/60kg. Expected: reject slot
+ISS-0002,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-010002,SKU-003526 9.3x46.3x51.8cm 15.69kg exceeds LOC-Z057-007163 60x40x40cm/60kg. Expected: reject slot
+ISS-0003,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-010003,SKU-004113 34.1x45.4x45.4cm 15.35kg exceeds LOC-Z065-008290 60x60x40cm/40kg. Expected: reject slot
+ISS-0004,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-010004,SKU-000938 13.8x25.5x24.7cm 35.36kg exceeds LOC-Z013-001740 60x40x50cm/30kg. Expected: reject slot
+ISS-0005,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-010005,SKU-004871 12x15x12cm 54.88kg exceeds LOC-Z077-009790 60x60x40cm/40kg. Expected: reject slot
+ISS-0006,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-010006,SKU-002234 11.6x12.8x35.2cm 33.96kg exceeds LOC-Z033-004117 60x60x60cm/30kg. Expected: reject slot
+ISS-0007,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-010007,SKU-000436 54.8x50.8x49.6cm 40.79kg exceeds LOC-Z005-000722 60x50x60cm/30kg. Expected: reject slot
+ISS-0008,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-010008,SKU-000145 40.1x22.8x7.1cm 48.32kg exceeds LOC-Z001-000236 60x50x50cm/40kg. Expected: reject slot
+ISS-0009,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-010009,SKU-001257 22.4x51.4x45cm 20.01kg exceeds LOC-Z021-002662 60x50x60cm/30kg. Expected: reject slot
+ISS-0010,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-010010,SKU-000463 46.5x54.4x54cm 1.99kg exceeds LOC-Z005-000768 60x60x50cm/60kg. Expected: reject slot
+ISS-0011,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-010011,SKU-003254 (COLD goods) placed in HAZMAT zone location LOC-Z055-006903. Expected: reject slot
+ISS-0012,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-010012,SKU-003920 (COLD goods) placed in HAZMAT zone location LOC-Z063-007894. Expected: reject slot
+ISS-0013,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-010013,SKU-002941 (HAZMAT goods) placed in COLD zone location LOC-Z046-005853. Expected: reject slot
+ISS-0014,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-010014,SKU-004009 (COLD goods) placed in AMBIENT zone location LOC-Z065-008235. Expected: reject slot
+ISS-0015,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-010015,SKU-004705 (HAZMAT goods) placed in COLD zone location LOC-Z074-009359. Expected: reject slot
+ISS-0016,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-010016,SKU-001982 (HAZMAT goods) placed in AMBIENT zone location LOC-Z029-003614. Expected: reject slot
+ISS-0017,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-010017,SKU-001298 (COLD goods) placed in HAZMAT zone location LOC-Z023-002882. Expected: reject slot
+ISS-0018,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-010018,SKU-004745 (COLD goods) placed in HAZMAT zone location LOC-Z075-009380. Expected: reject slot
+ISS-0019,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-010019,SKU-002438 (COLD goods) placed in HAZMAT zone location LOC-Z039-004897. Expected: reject slot
+ISS-0020,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-010020,SKU-004339 (HAZMAT goods) placed in COLD zone location LOC-Z070-008826. Expected: reject slot
+ISS-0021,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-010021,LOC-Z077-009759 already ACTIVE for SKU-004888 (SLOT-2026-009888); SKU-004947 also assigned. Expected: reject later slot
+ISS-0022,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-010022,LOC-Z009-001142 already ACTIVE for SKU-000578 (SLOT-2026-005578); SKU-000712 also assigned. Expected: reject later slot
+ISS-0023,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-010023,LOC-Z017-002244 already ACTIVE for SKU-001197 (SLOT-2026-006197); SKU-001067 also assigned. Expected: reject later slot
+ISS-0024,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-010024,LOC-Z037-004764 already ACTIVE for SKU-002470 (SLOT-2026-007470); SKU-002416 also assigned. Expected: reject later slot
+ISS-0025,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-010025,LOC-Z077-009601 already ACTIVE for SKU-004975 (SLOT-2026-009975); SKU-004995 also assigned. Expected: reject later slot
+ISS-0026,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-010026,LOC-Z045-005703 already ACTIVE for SKU-002816 (SLOT-2026-007816); SKU-002802 also assigned. Expected: reject later slot
+ISS-0027,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-010027,LOC-Z037-004652 already ACTIVE for SKU-002317 (SLOT-2026-007317); SKU-002375 also assigned. Expected: reject later slot
+ISS-0028,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-010028,LOC-Z003-000364 already ACTIVE for SKU-000164 (SLOT-2026-005164); SKU-000158 also assigned. Expected: reject later slot
+ISS-0029,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-010029,LOC-Z017-002149 already ACTIVE for SKU-001103 (SLOT-2026-006103); SKU-001153 also assigned. Expected: reject later slot
+ISS-0030,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-010030,LOC-Z077-009651 already ACTIVE for SKU-004914 (SLOT-2026-009914); SKU-004857 also assigned. Expected: reject later slot
+ISS-0031,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-009872-004,Aisle 2 of WH-017 blocked on 2026-03-23 (BLK-2026-000061) but pick routed through it. Expected: re-route
+ISS-0032,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-017443-002,Aisle 9 of WH-014 blocked on 2026-06-17 (BLK-2026-000062) but pick routed through it. Expected: re-route
+ISS-0033,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-012001-001,Aisle 7 of WH-009 blocked on 2026-04-16 (BLK-2026-000063) but pick routed through it. Expected: re-route
+ISS-0034,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-024607-004,Aisle 4 of WH-006 blocked on 2026-09-06 (BLK-2026-000064) but pick routed through it. Expected: re-route
+ISS-0035,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-032647-001,Aisle 2 of WH-011 blocked on 2026-10-14 (BLK-2026-000065) but pick routed through it. Expected: re-route
+ISS-0036,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-003516-001,Aisle 4 of WH-007 blocked on 2026-02-10 (BLK-2026-000066) but pick routed through it. Expected: re-route
+ISS-0037,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-032466-002,Aisle 5 of WH-017 blocked on 2026-10-12 (BLK-2026-000067) but pick routed through it. Expected: re-route
+ISS-0038,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-017646-005,Aisle 6 of WH-019 blocked on 2026-06-18 (BLK-2026-000068) but pick routed through it. Expected: re-route
+ISS-0039,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-003092-001,Aisle 8 of WH-013 blocked on 2026-02-06 (BLK-2026-000069) but pick routed through it. Expected: re-route
+ISS-0040,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-016095-005,Aisle 6 of WH-010 blocked on 2026-06-02 (BLK-2026-000070) but pick routed through it. Expected: re-route
+ISS-0041,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-019|2026-02-16,20 extra replen tasks (REPL-2026-039173..039192) bring day to 195.92 min vs capacity 192. Expected: defer/rebalance
+ISS-0042,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-010|2026-04-15,24 extra replen tasks (REPL-2026-039193..039216) bring day to 227.81 min vs capacity 224. Expected: defer/rebalance
+ISS-0043,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-002|2026-05-06,19 extra replen tasks (REPL-2026-039217..039235) bring day to 203.45 min vs capacity 203. Expected: defer/rebalance
+ISS-0044,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-020|2026-02-01,26 extra replen tasks (REPL-2026-039236..039261) bring day to 194.56 min vs capacity 194. Expected: defer/rebalance
+ISS-0045,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-006|2026-01-08,26 extra replen tasks (REPL-2026-039262..039287) bring day to 232.93 min vs capacity 225. Expected: defer/rebalance
+ISS-0046,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-017|2026-03-26,19 extra replen tasks (REPL-2026-039288..039306) bring day to 180.68 min vs capacity 180. Expected: defer/rebalance
+ISS-0047,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-015|2026-04-01,16 extra replen tasks (REPL-2026-039307..039322) bring day to 189.52 min vs capacity 184. Expected: defer/rebalance
+ISS-0048,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-010|2026-02-18,27 extra replen tasks (REPL-2026-039323..039349) bring day to 225.34 min vs capacity 224. Expected: defer/rebalance
+ISS-0049,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-020|2026-07-07,25 extra replen tasks (REPL-2026-039350..039374) bring day to 198.32 min vs capacity 194. Expected: defer/rebalance
+ISS-0050,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-008|2026-07-20,18 extra replen tasks (REPL-2026-039375..039392) bring day to 183.24 min vs capacity 182. Expected: defer/rebalance

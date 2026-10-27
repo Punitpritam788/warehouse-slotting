@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Warehouse Slotting Lab</title>
+<style>
+:root{--bg:#f6f5f1;--fg:#1d1d1b;--mut:#6b6a63;--card:#fff;--line:#e2e0d8;--ok:#1b7f4d;--bad:#b3261e;--acc:#0f5c8a}
+@media(prefers-color-scheme:dark){:root{--bg:#161614;--fg:#ecebe5;--mut:#9a988e;--card:#1f1f1c;--line:#34332e;--ok:#5fc98e;--bad:#ff8a80;--acc:#6bb7e6}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:26px;margin:0 0 4px}h2{font-size:17px;margin:0 0 10px}p.sub{color:var(--mut);margin:0 0 20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px;overflow-x:auto}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:end}label{display:flex;flex-direction:column;font-size:12px;color:var(--mut);gap:3px}
+input,select,button{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)}
+input{width:110px}button{cursor:pointer;background:var(--acc);color:#fff;border-color:var(--acc)}button.alt{background:none;color:var(--acc)}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mut);font-weight:600}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:13px}
+.bars{display:flex;align-items:end;gap:6px;height:90px}.bars div{flex:1;background:var(--acc);border-radius:3px 3px 0 0;position:relative}.bars span{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:11px;color:var(--mut)}
+#out{display:none}
+</style>
+</head>
+<body>
+<main>
+  <h1>Warehouse Slotting Lab</h1>
+  <p class="sub">Synthetic warehouse data, SKU-to-location slotting, pick-distance and replenishment impact. Everything is generated in your browser from a fixed seed.</p>
+
+  <div class="card">
+    <div class="row">
+      <label>Scale<select id="scale"><option value="starter">Starter (4 WH, 4k lines)</option><option value="full">Full (20 WH, 100k lines)</option></select></label>
+      <label>Seed<input id="seed" type="number" value="20261022"></label>
+      <button id="go">Generate</button>
+      <span id="st" style="color:var(--mut)"></span>
+    </div>
+  </div>
+
+  <div id="out">
+    <div class="card"><h2>Reproducibility</h2><div id="repro"></div></div>
+    <div class="card"><h2>Tables</h2><div id="tables"></div></div>
+    <div class="card"><h2>Baseline vs optimized layout <small style="font-weight:400;color:var(--mut)">(same demand, both layouts)</small></h2><div id="metrics"></div></div>
+    <div class="card"><h2>Order lines per month (peak windows: Mar 1-15, Sep 15 - Oct 11)</h2><div class="bars" id="bars" style="margin-bottom:24px"></div></div>
+    <div class="card"><h2>Validation</h2><div id="valid"></div></div>
+    <div class="card"><h2>Injected edge cases vs detector</h2><div id="det"></div><div id="gt" style="margin-top:12px"></div></div>
+  </div>
+</main>
+<script src="dict.js"></script>
+<script src="engine.js"></script>
+<script>
+const $ = id => document.getElementById(id), W = window.WS;
+const fmt = n => typeof n === 'number' ? n.toLocaleString() : n;
+// textContent only: generated values never touch innerHTML
+const el = (tag, txt, cls) => { const e = document.createElement(tag); if (txt != null) e.textContent = txt; if (cls) e.className = cls; return e; };
+const table = (head, rows, numFrom = 1) => { const t = el('table'), h = el('tr'); head.forEach((x, i) => h.append(el('th', x, i >= numFrom ? 'n' : ''))); t.append(h); rows.forEach(r => { const tr = el('tr'); r.forEach((x, i) => tr.append(el('td', fmt(x), i >= numFrom ? 'n' : ''))); t.append(tr); }); return t; };
+const put = (id, ...nodes) => $(id).replaceChildren(...nodes);
+const download = (name, text, type) => { const a = el('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); };
+
+$('go').onclick = () => {
+  $('st').textContent = 'Generating...';
+  setTimeout(() => {   // let the label paint before the synchronous work
+    try {
+      const p = { ...W.PRESETS[$('scale').value], seed: +$('seed').value };
+      const t0 = performance.now(), A = W.gen(p), B = W.gen(p), ms = Math.round(performance.now() - t0);
+      const csv = {}, same = W.TABLES.every(t => (csv[t] = W.toCSV(A.db, t)) === W.toCSV(B.db, t));
+      $('out').style.display = 'block'; $('st').textContent = `Done in ${ms} ms (two runs).`;
+      put('repro', el('p', same ? `Two runs with seed ${p.seed} are byte-identical in all ${W.TABLES.length} tables.` : 'MISMATCH between runs', same ? 'ok' : 'bad'));
+      const dl = el('div', null, 'chips');
+      put('tables', table(['Table', 'Rows', 'FNV-1a checksum', ''], W.TABLES.map(t => { return [t === 'GroundTruth' ? 'ground_truth (separate)' : t, A.db[t].length, W.checksum(csv[t]), '']; })), dl);
+      W.TABLES.forEach(t => { const b = el('button', t + '.csv', 'alt'); b.onclick = () => download((t === 'GroundTruth' ? 'ground_truth' : t) + '.csv', csv[t], 'text/csv'); dl.append(b); });
+      const sq = el('button', 'seed.sql', 'alt'); sq.onclick = () => download('seed.sql', W.toSQL(A.db), 'text/plain'); dl.append(sq);
+      const m = A.metrics, b = m.baseline, o = m.optimized, d = m.delta_pct, row = (n, k, dk) => [n, b[k], o[k], d[dk] != null ? (d[dk] > 0 ? '+' : '') + d[dk] + '%' : ''];
+      put('metrics', table(['Metric', 'Baseline (random fit)', 'Optimized (velocity ranked)', 'Change'], [
+        row('Total pick distance (m)', 'total_pick_distance_m', 'distance'), row('Avg distance per line (m)', 'avg_distance_per_line_m', 'distance'),
+        row('Avg distance, class-A SKUs (m)', 'avg_distance_class_A_m', 'class_A_distance'), row('Replenishment tasks', 'replen_tasks', 'replen_tasks'),
+        row('Replenishment labor (min)', 'replen_labor_min', 'replen_labor'), row('Lines per labor hour', 'lines_per_labor_hour', 'throughput'),
+        ['Peak-day replen labor / capacity', b.peak_day_labor_utilisation, o.peak_day_labor_utilisation, '']]), el('p', m.assumptions, 'sub'));
+      const mx = Math.max(...m.monthly_lines); put('bars', ...m.monthly_lines.map((v, i) => { const d = el('div'); d.style.height = Math.max(2, v / mx * 100) + '%'; d.title = v; d.append(el('span', 'JFMAMJJASOND'[i])); return d; }));
+      const bad = [...A.report.validation_clean, ...A.report.validation].filter(c => !c.ok), nChk = A.report.validation.length;
+      put('valid', el('p', bad.length ? `${bad.length} failing checks` : `All ${nChk} checks pass on clean data and after injection; detector flags ${A.report.detections_clean} rows on clean data.`, bad.length ? 'bad' : 'ok'),
+        table(['Check', 'Violations'], A.report.validation.map(c => [(c.ok ? 'OK  ' : 'FAIL ') + c.name, c.bad]), 1));
+      const q = A.report.detection;
+      put('det', el('p', `Expected ${q.expected}, detected ${q.found}: TP ${q.true_positive}, FP ${q.false_positive}, FN ${q.false_negative}.`, q.false_positive + q.false_negative ? 'bad' : 'ok'));
+      put('gt', table(['Issue', 'Type', 'Entity', 'Expected decision'], A.db.GroundTruth.slice(0, 50).map(g => [g.issue_id, g.issue_type, g.entity_id, g.note]), 9));
+    } catch (e) { $('st').textContent = 'Error: ' + e.message; }
+  }, 30);
+};
+</script>
+</body>
+</html>

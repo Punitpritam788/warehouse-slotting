@@ -1,0 +1,21 @@
+warehouse_id,name,status,labor_capacity_min_per_day,opened_date
+WH-001,Fulfilment Centre 1,ACTIVE,229,2020-03-01
+WH-002,Fulfilment Centre 2,ACTIVE,203,2020-02-01
+WH-003,Fulfilment Centre 3,ACTIVE,219,2020-11-01
+WH-004,Fulfilment Centre 4,ACTIVE,189,2020-07-01
+WH-005,Fulfilment Centre 5,ACTIVE,190,2018-06-01
+WH-006,Fulfilment Centre 6,ACTIVE,225,2015-12-01
+WH-007,Fulfilment Centre 7,ACTIVE,193,2021-07-01
+WH-008,Fulfilment Centre 8,ACTIVE,182,2022-12-01
+WH-009,Fulfilment Centre 9,ACTIVE,200,2022-07-01
+WH-010,Fulfilment Centre 10,ACTIVE,224,2020-09-01
+WH-011,Fulfilment Centre 11,ACTIVE,215,2024-11-01
+WH-012,Fulfilment Centre 12,ACTIVE,174,2018-06-01
+WH-013,Fulfilment Centre 13,ACTIVE,179,2022-09-01
+WH-014,Fulfilment Centre 14,ACTIVE,180,2023-10-01
+WH-015,Fulfilment Centre 15,ACTIVE,184,2023-02-01
+WH-016,Fulfilment Centre 16,ACTIVE,265,2019-12-01
+WH-017,Fulfilment Centre 17,ACTIVE,180,2023-04-01
+WH-018,Fulfilment Centre 18,ACTIVE,217,2023-12-01
+WH-019,Fulfilment Centre 19,ACTIVE,192,2017-12-01
+WH-020,Fulfilment Centre 20,ACTIVE,194,2022-12-01

@@ -1,0 +1,11 @@
+issue_id,issue_type,entity_type,entity_id,note
+ISS-0001,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-000801,SKU-000095 15.9x50.6x49.7cm 23.13kg exceeds LOC-Z001-000051 60x40x40cm/30kg. Expected: reject slot
+ISS-0002,SKU_EXCEEDS_LOCATION_CAPACITY,SlotAssignment,SLOT-2026-000802,SKU-000248 53.8x53.7x45.8cm 16.22kg exceeds LOC-Z009-000511 60x40x50cm/30kg. Expected: reject slot
+ISS-0003,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-000803,SKU-000029 (COLD goods) placed in HAZMAT zone location LOC-Z003-000163. Expected: reject slot
+ISS-0004,INCOMPATIBLE_COLOCATED,SlotAssignment,SLOT-2026-000804,SKU-000228 (HAZMAT goods) placed in COLD zone location LOC-Z010-000542. Expected: reject slot
+ISS-0005,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-000805,LOC-Z013-000619 already ACTIVE for SKU-000314 (SLOT-2026-000714); SKU-000398 also assigned. Expected: reject later slot
+ISS-0006,DUPLICATE_ACTIVE_LOCATION,SlotAssignment,SLOT-2026-000806,LOC-Z009-000415 already ACTIVE for SKU-000278 (SLOT-2026-000678); SKU-000206 also assigned. Expected: reject later slot
+ISS-0007,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-000861-004,Aisle 1 of WH-003 blocked on 2026-08-06 (BLK-2026-000013) but pick routed through it. Expected: re-route
+ISS-0008,PICK_USES_BLOCKED_AISLE,PickEvent,PICK-ORD-2026-000499-001,Aisle 3 of WH-001 blocked on 2026-04-29 (BLK-2026-000014) but pick routed through it. Expected: re-route
+ISS-0009,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-001|2026-02-25,8 extra replen tasks (REPL-2026-001535..001542) bring day to 65.79 min vs capacity 60. Expected: defer/rebalance
+ISS-0010,REPLEN_EXCEEDS_LABOR_CAPACITY,WarehouseDay,WH-001|2026-04-30,6 extra replen tasks (REPL-2026-001543..001548) bring day to 63.35 min vs capacity 60. Expected: defer/rebalance
