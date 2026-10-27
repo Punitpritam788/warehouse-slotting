@@ -1,4 +1,11 @@
-# Warehouse Slotting Lab
+<p align="center"><img src="assets/banner.svg" alt="Warehouse Slotting Lab" width="100%"></p>
+
+<p align="center">
+<b>Put the right SKU in the right slot, then prove it with numbers.</b><br>
+Seeded synthetic warehouse data, velocity-based slotting, validation, labelled edge cases and a browser UI. Zero dependencies.
+</p>
+
+<p align="center">
 
 ![Node](https://img.shields.io/badge/node-%E2%89%A518-339933?logo=node.js&logoColor=white)
 ![Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)
@@ -10,14 +17,25 @@
 ![Anomaly detection](https://img.shields.io/badge/anomaly%20detection-50%2F50-success)
 ![AI disclosure](https://img.shields.io/badge/AI%20use-disclosed%20in%20PROMPTS.md-orange)
 
-Place SKUs into warehouse locations using demand velocity, dimensions and compatibility, then measure the effect on pick distance, throughput and replenishment workload. All data is synthetic, generated from a fixed seed, validated, and shipped with a separate ground-truth file for deliberately injected edge cases.
+</p>
 
-**Live page:** <https://punitpritam788.github.io/warehouse-slotting/> (after enabling GitHub Pages on `main`, folder `/`). Or just open `index.html` locally.
+<p align="center">
+<a href="https://punitpritam788.github.io/warehouse-slotting/"><b>Live demo</b></a> &nbsp;|&nbsp;
+<a href="#-quick-start">Quick start</a> &nbsp;|&nbsp;
+<a href="#-results">Results</a> &nbsp;|&nbsp;
+<a href="DATA_DICTIONARY.md">Data dictionary</a> &nbsp;|&nbsp;
+<a href="PROMPTS.md">AI disclosure</a>
+</p>
 
-## Contents
-[Quick start](#quick-start) · [Results](#results) · [Architecture](#architecture) · [Data model](#data-model) · [Generation logic](#generation-logic) · [Edge cases and ground truth](#edge-cases-and-ground-truth) · [Validation](#validation) · [Reproducibility](#reproducibility) · [Assumptions and trade-offs](#assumptions-and-trade-offs) · [Limitations](#limitations) · [AI use](#ai-use) · [Repo layout](#repo-layout)
+## ✨ Highlights
 
-## Quick start
+| 🚚 **-46.6%** | 📦 **+15.1%** | ✅ **0** | 🎯 **50 / 50** | 🔁 **100%** |
+|:---:|:---:|:---:|:---:|:---:|
+| pick distance | lines per labor hour | validation failures | injected issues found | same-seed reproducible |
+
+<sub>Full scale: 20 warehouses, 10,000 locations, 5,000 SKUs, 100,000 order lines, seed 20261022. The live page is available once GitHub Pages is enabled (main, folder /).</sub>
+
+## 🚀 Quick start
 
 Requires Node 18+. No install step, no dependencies.
 
@@ -40,7 +58,7 @@ The command prints counts, validation failures, anomaly detection vs ground trut
 
 Web UI: open `index.html` (no server needed), pick a scale and click **Generate**. It runs the same engine in the browser, twice, and shows byte-for-byte equality, the baseline vs optimized comparison, every validation check and the injected edge cases. It can also download each table as CSV and the SQL seed.
 
-## Results
+## 📊 Results
 
 Full scale, seed 20261022 (from `data/full/manifest.json`). Both layouts are replayed against the **same** 100,000 order lines.
 
@@ -64,7 +82,7 @@ Reading it: putting fast movers near the dock cuts walking by almost half. Reple
 | Injected edge cases vs detector | 50 expected, 50 found, 0 false positives, 0 false negatives |
 | Two runs, same seed | identical in every table |
 
-## Architecture
+## 🏗️ Architecture
 
 ```mermaid
 flowchart LR
@@ -87,7 +105,7 @@ flowchart LR
 - `engine.js` holds the generator, validator, detector and exporters. It has no dependencies and runs unchanged in Node and in the browser.
 - The detector reads only the input tables. It never reads the ground truth, so the answer key cannot leak into it.
 
-## Data model
+## 🗂️ Data model
 
 ```mermaid
 erDiagram
@@ -113,7 +131,7 @@ The ten entities from the brief plus `AisleBlock` (needed to model "pick path us
 - **IDs:** `WH-001`, `LOC-<zone-id>-000001`, `SKU-000001`, `ORD-2026-000001`, `PICK-<order-id>-001`, `SLOT-2026-000001`. Added: `REPL-2026-000001`, `BLK-2026-000001`. Counters are zero padded and IDs are never reused.
 - **Lifecycle and history:** slots are never overwritten. A slot is `ACTIVE` while it has no end date and becomes `SUPERSEDED` when the end date is set. Baseline slots run 2026-01-01 to 2026-06-30, optimized slots start 2026-07-01.
 
-## Generation logic
+## ⚙️ Generation logic
 
 Order of creation: Warehouse, Zone, Location, SKU, Order and OrderLine, SKUProfile, SlotAssignment, PickEvent, Replenishment, AisleBlock, then injected edge cases. Child rows only reference parents that already exist.
 
@@ -131,7 +149,7 @@ Order of creation: Warehouse, Zone, Location, SKU, Order and OrderLine, SKUProfi
 | Labor capacity | per warehouse, 115% of its busiest replenishment day |
 | Derived values | order totals, picks_total, velocity class, volumes, distances and labor are computed from source rows, never drawn independently |
 
-## Edge cases and ground truth
+## 🧪 Edge cases and ground truth
 
 Clean data is generated and validated first. Edge cases are then added as **new labelled rows** and never by editing valid rows. Ten per type at full scale (two at starter scale).
 
@@ -145,7 +163,8 @@ Clean data is generated and validated first. Edge cases are then added as **new 
 
 `ground_truth.csv` lists `issue_id, issue_type, entity_type, entity_id, note`, where the note states the expected decision (reject, re-route, rebalance). Each injected case is built so that only its own rule fires; the comparison reports true positives, false positives and false negatives.
 
-## Validation
+<details>
+<summary><b>✅ Validation</b> (click to expand)</summary>
 
 `engine.js > validate` runs 50+ checks, all driven by `dict.js`:
 
@@ -159,11 +178,14 @@ Clean data is generated and validated first. Edge cases are then added as **new 
 
 Business-rule violations (the five edge-case types) are deliberately **not** structural errors, so they pass validation and are found by the detector instead.
 
-## Reproducibility
+</details>
+
+## 🔁 Reproducibility
 
 One PRNG (mulberry32) seeded with 20261022, no `Math.random`, no wall-clock dates. `gen.js` generates the data twice in the same run and compares every table, and the manifest stores a SHA-256 and an FNV-1a checksum per table. Re-running with the same seed on the same Node version gives identical files.
 
-## Assumptions and trade-offs
+<details>
+<summary><b>🧠 Assumptions and trade-offs</b> (click to expand)</summary>
 
 - **One SKU per slot, fixed orientation.** Keeps fit checks and duplicate detection unambiguous.
 - **Manhattan distance to a single dock.** Enough to compare layouts like for like; a full pick-path simulation was out of scope.
@@ -173,7 +195,10 @@ One PRNG (mulberry32) seeded with 20261022, no `Math.random`, no wall-clock date
 - **Edge cases are additive rows.** Safer than corrupting valid rows and keeps the ground truth exact.
 - **No external data.** Nothing to license or attribute.
 
-## Limitations
+</details>
+
+<details>
+<summary><b>⚠️ Limitations</b> (click to expand)</summary>
 
 - No multi-slot or forward/reserve pick faces, and no rotation of items.
 - "Blocked aisle" is checked on the aisle of the pick location, not along a routed path.
@@ -182,11 +207,13 @@ One PRNG (mulberry32) seeded with 20261022, no `Math.random`, no wall-clock date
 - Seasonality is a single flat multiplier during two windows.
 - Results depend on the synthetic parameters; they show the mechanism, not a prediction for a real site.
 
-## AI use
+</details>
+
+## 🤖 AI use
 
 This project was built with an LLM (Claude). The prompts are in [`PROMPTS.md`](PROMPTS.md) together with what the AI produced and what I reviewed and verified. Verification: `node gen.js` and `node gen.js --full` pass all checks, and `index.html` was loaded in headless Chromium with the same results.
 
-## Repo layout
+## 📁 Repo layout
 
 ```
 index.html            web UI (loads dict.js + engine.js)
@@ -199,6 +226,6 @@ data/starter/         all outputs for the starter scale
 data/full/            CSV + ground_truth.csv + manifest.json for the full scale
 ```
 
-## License and data provenance
+## 📜 License and data provenance
 
 All data is generated by this code; no third-party datasets were used. Add a `LICENSE` file of your choice before sharing widely.
