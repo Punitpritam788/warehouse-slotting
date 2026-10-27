@@ -216,7 +216,8 @@ This project was built with an LLM (Claude). The prompts are in [`PROMPTS.md`](P
 ## 📁 Repo layout
 
 ```
-index.html            web UI (loads dict.js + engine.js)
+index.html            modern web UI (loads dict.js + engine.js)
+classic.html          plain single-page layout of the same UI, linked from the modern page
 engine.js             generator, validator, detector, exporters
 dict.js               data dictionary, foreign keys, DDL and markdown generators
 gen.js                CLI: generate, validate, write files, check reproducibility
