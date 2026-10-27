@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Warehouse Slotting Lab</title>
 <meta name="description" content="Seeded synthetic warehouse data with velocity-based SKU slotting, validation and labelled edge cases.">
+<script>(function(){var v=new URLSearchParams(location.search).get("view");try{v=v||localStorage.getItem("view")}catch(e){}document.documentElement.dataset.view=v==="classic"?"classic":"modern"})()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
@@ -127,13 +128,44 @@ details.card summary{cursor:pointer;font:650 17px var(--disp);list-style:none}de
 footer{border-top:1px solid var(--line);padding-block:40px 60px;color:var(--mut);font-size:14px}footer .wrap{display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-between}footer a{text-decoration:none;border-bottom:1px solid var(--line)}
 #results[hidden]{display:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+
+/* progress, pager */
+.chk{flex-direction:row;align-items:center;gap:8px}.chk input{width:auto;accent-color:var(--amber)}
+.pbar{height:6px;border-radius:99px;background:var(--bg2);overflow:hidden;margin-top:14px}.pbar i{display:block;height:100%;width:0;background:var(--amber);transition:width .35s}
+.prow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px}
+.pager{display:flex;align-items:center;gap:12px;margin-top:12px}.pager button{font:500 12px var(--mono);border:1px solid var(--line);background:none;color:var(--fg);border-radius:8px;padding:5px 12px;cursor:pointer}.pager button:disabled{opacity:.35;cursor:default}
+@media(max-width:520px){nav .btn{display:none}nav .seg{margin-left:auto}}
+
+/* classic view: same content in a plain layout */
+:root[data-view="classic"]:not([data-x]){--bg:#f6f5f1;--bg2:#f6f5f1;--fg:#1d1d1b;--mut:#6b6a63;--line:#e2e0d8;--card:#fff;--card2:#fff;--amber:#e08a00;--amber-ink:#fff;--amber-txt:#0f5c8a;--steel:#0f5c8a;--dim:#8896a2;--grid:transparent;--glow:transparent;--disp:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--ok:#1b7f4d;--bad:#b3261e}
+@media(prefers-color-scheme:dark){:root[data-view="classic"]:not([data-theme="light"]):not([data-x]){--bg:#161614;--bg2:#161614;--fg:#ecebe5;--mut:#9a988e;--line:#34332e;--card:#1f1f1c;--card2:#1f1f1c;--amber:#ffb703;--amber-ink:#161614;--amber-txt:#6bb7e6;--steel:#6bb7e6;--dim:#5b6872;--ok:#5fc98e;--bad:#ff8a80;color-scheme:dark}}
+[data-view="classic"] body{background-image:none;font-size:15px;line-height:1.5}
+[data-view="classic"] nav{background:var(--card);backdrop-filter:none}
+[data-view="classic"] nav .links,[data-view="classic"] .floor,[data-view="classic"] .tag,[data-view="classic"] .tape,[data-view="classic"] .ticker,[data-view="classic"] .head .mono,[data-view="classic"] .cta{display:none}
+[data-view="classic"] .hero{background:linear-gradient(135deg,#0b1f2e,#14425f);color:#fff;padding-block:34px 28px}
+[data-view="classic"] .hero .wrap{grid-template-columns:minmax(0,1fr)}
+[data-view="classic"] h1{font-size:clamp(28px,5vw,42px);line-height:1.1;letter-spacing:-.02em;font-weight:700;color:#fff}
+[data-view="classic"] h1 .w{animation:none}[data-view="classic"] h1 em{color:#ffb703}
+[data-view="classic"] .lede{color:#c3d6e2;margin:12px 0 0;max-width:42em}
+[data-view="classic"] section{padding-block:22px 6px}
+[data-view="classic"] #edge{background:none!important;border:0!important}
+[data-view="classic"] .head{margin-bottom:14px;gap:4px}[data-view="classic"] h2{font-size:19px;letter-spacing:0;font-weight:650;line-height:1.3}[data-view="classic"] .head p{font-size:14px}
+[data-view="classic"] h3{font-size:16px;letter-spacing:0}
+[data-view="classic"] .card{border-radius:10px;padding:16px}[data-view="classic"] .card::before{display:none}
+[data-view="classic"] .rv{opacity:1;transform:none;transition:none}
+[data-view="classic"] .stat b{font-size:28px;letter-spacing:-.01em}
+[data-view="classic"] .btn{border-radius:6px;box-shadow:none;transform:none}
+[data-view="classic"] .seg button[aria-pressed="true"]{color:#fff}
+[data-view="classic"] .bento .card{grid-column:auto}[data-view="classic"] .bento{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+[data-view="classic"] footer{border:0}
 </style>
 </head>
 <body>
 <nav><div class="wrap">
   <a class="brand" href="#top"><i></i>Slotting Lab</a>
-  <div class="links"><a href="#how">How it works</a><a href="#results">Results</a><a href="#edge">Edge cases</a><a href="#lab">Run it</a><a href="classic.html" title="Plain single-page layout">Classic view</a></div>
-  <a class="btn" href="#lab">Generate data</a>
+  <div class="links"><a href="#how">How it works</a><a href="#results">Results</a><a href="#edge">Edge cases</a><a href="#lab">Run it</a></div>
+  <div class="seg" role="group" aria-label="Page layout"><button id="vMod" aria-pressed="true">Modern</button><button id="vCla" aria-pressed="false">Classic</button></div>
+  <a class="btn" id="navgen" href="#lab">Generate data</a>
 </div></nav>
 
 <header class="hero" id="top"><div class="wrap">
@@ -191,14 +223,17 @@ footer{border-top:1px solid var(--line);padding-block:40px 60px;color:var(--mut)
   <div class="head rv"><span class="mono">Run it</span><h2>Generate the dataset yourself.</h2><p>Runs in your browser with the same engine as the command line. Same seed, same bytes.</p></div>
   <div class="lab">
     <div class="card rv">
-      <label for="scale">Scale<select id="scale"><option value="starter">Starter: 4 warehouses, 4k lines</option><option value="full">Full: 20 warehouses, 100k lines</option></select></label>
+      <label for="scale">Scale<select id="scale"><option value="starter">Starter: 4 warehouses, 4k lines</option><option value="full">Full: 20 warehouses, 100k lines</option><option value="large">Large stress test: 40 warehouses, 400k lines</option></select></label>
+      <p class="mono" id="hint" style="margin:-4px 0 14px;text-transform:none;letter-spacing:0"></p>
       <label for="seed">Seed<input id="seed" type="number" value="20261022"></label>
+      <label class="chk" for="verify"><input type="checkbox" id="verify" checked> Verify reproducibility (generates twice)</label>
       <button class="btn" id="go" style="width:100%;justify-content:center">Generate</button>
+      <div id="prog" hidden><div class="pbar"><i id="pfill"></i></div><div class="prow"><span class="mono" id="pname"></span><button class="btn ghost" id="cancel" style="padding:4px 12px;font-size:12px">Cancel</button></div></div>
       <p class="mono" id="st" style="margin-top:14px"></p>
       <p id="repro" style="margin-top:10px;font-size:14px"></p>
       <div class="dl" id="dl"></div>
     </div>
-    <div class="card rv" style="--d:100ms"><h3 style="margin-bottom:12px">Data explorer</h3><div class="tabs" id="tabs"></div><div class="scroll" id="prev"></div><p class="mono" id="prevn" style="margin-top:10px"></p></div>
+    <div class="card rv" style="--d:100ms"><h3 style="margin-bottom:12px">Data explorer</h3><div class="tabs" id="tabs"></div><div class="scroll" id="prev"></div><div class="pager"><button id="pPrev" aria-label="Previous rows">Prev</button><span class="mono" id="pinfo"></span><button id="pNext" aria-label="Next rows">Next</button></div></div>
   </div>
   <div class="grid2" style="margin-top:16px">
     <div class="card rv"><h3 style="margin-bottom:12px">Tables and checksums</h3><div class="scroll" id="tables"></div></div>
@@ -209,11 +244,12 @@ footer{border-top:1px solid var(--line);padding-block:40px 60px;color:var(--mut)
 
 <footer><div class="wrap">
   <div><b style="font-family:var(--disp);font-size:18px;color:var(--fg)">Warehouse Slotting Lab</b><p style="margin-top:6px;max-width:34em">All data is synthetic. Built with an AI assistant; prompts and what was reviewed are in the repo.</p></div>
-  <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start"><a href="https://github.com/Punitpritam788/warehouse-slotting">GitHub</a><a href="https://github.com/Punitpritam788/warehouse-slotting/blob/main/DATA_DICTIONARY.md">Data dictionary</a><a href="https://github.com/Punitpritam788/warehouse-slotting/blob/main/PROMPTS.md">AI disclosure</a><a href="classic.html">Classic layout</a></div>
+  <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start"><a href="https://github.com/Punitpritam788/warehouse-slotting">GitHub</a><a href="https://github.com/Punitpritam788/warehouse-slotting/blob/main/DATA_DICTIONARY.md">Data dictionary</a><a href="https://github.com/Punitpritam788/warehouse-slotting/blob/main/PROMPTS.md">AI disclosure</a></div>
 </div></footer>
 
 <script src="dict.js"></script>
 <script src="engine.js"></script>
+<script src="session.js"></script>
 <script>
 const $ = id => document.getElementById(id), W = window.WS, RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fmt = n => typeof n === 'number' ? n.toLocaleString() : n, sign = v => (v > 0 ? '+' : '') + v + '%';
@@ -274,18 +310,37 @@ function countUp(node, to, dec, suffix, prefix) {
   size(); requestAnimationFrame(frame);
 })();
 
-/* ---------- slot heatmap ---------- */
-function heat(canvas, db, wid, strategy) {
-  const locs = db.Location.filter(l => l.warehouse_id === wid), aisles = Math.max(...locs.map(l => l.aisle_no));
-  const picks = new Map(db.SKUProfile.map(p => [p.sku_id, p.picks_total])), slotOf = new Map();
-  db.SlotAssignment.filter(s => s.strategy === strategy && s.warehouse_id === wid && s.effective_from !== '2026-10-01').forEach(s => slotOf.set(s.location_id, s.sku_id));
-  const cs = 10, g = 1, bw = 3 * (cs + g) + 8; canvas.width = aisles * bw + 4; canvas.height = 20 * (cs + g) + 4;
-  const ctx = canvas.getContext('2d'), max = Math.log(1 + Math.max(...locs.map(l => picks.get(slotOf.get(l.location_id)) || 0)));
-  const ramp = t => t > .75 ? '#9d2f00' : t > .5 ? '#e08a00' : t > .25 ? '#ffd166' : '#b9c6d0';
-  locs.forEach(l => { const n = picks.get(slotOf.get(l.location_id)); ctx.fillStyle = n == null ? 'rgba(130,140,150,.2)' : ramp(Math.log(1 + n) / max); ctx.fillRect(2 + (l.aisle_no - 1) * bw + (l.level_no - 1) * (cs + g), 2 + (l.bay_no - 1) * (cs + g), cs, cs); });
+/* ---------- layout switch: modern or classic ---------- */
+function setView(v, persist) {
+  document.documentElement.dataset.view = v; $('vMod').setAttribute('aria-pressed', v === 'modern'); $('vCla').setAttribute('aria-pressed', v === 'classic');
+  if (persist) { try { localStorage.setItem('view', v); } catch (e) { } try { const u = new URL(location.href); u.searchParams.set('view', v); history.replaceState(null, '', u); } catch (e) { } }
 }
+$('vMod').onclick = () => setView('modern', true); $('vCla').onclick = () => setView('classic', true); setView(document.documentElement.dataset.view || 'modern', false);
 
-/* ---------- generate and render ---------- */
+/* ---------- generation runs in a Web Worker (main-thread fallback on file://) ---------- */
+let worker = null, workerBad = false, local = null, running = false, lastMsg = null, uid = 0, S = null, tab = 'Warehouse', page = 0; const PAGE = 20, pending = new Map();
+function startWorker() { if (worker || workerBad) return; try { worker = new Worker('worker.js'); worker.onmessage = e => onMsg(e.data); worker.onerror = ev => { ev.preventDefault(); worker = null; workerBad = true; if (running && lastMsg) send(lastMsg); }; } catch (e) { workerBad = true; } }
+function send(m) { if (m.type === 'run') lastMsg = m; startWorker(); if (worker) worker.postMessage(m); else { local = local || W.makeSession(onMsg); $('cancel').hidden = true; setTimeout(() => local(m), 30); } }
+const ask = m => new Promise(res => { m.id = ++uid; pending.set(m.id, res); send(m); });
+function onMsg(m) {
+  if (m.type === 'stage') { $('pfill').style.width = (m.i / m.of * 100) + '%'; $('pname').textContent = m.name + '...'; }
+  else if (m.type === 'done') { running = false; $('prog').hidden = true; $('go').disabled = false; $('go').textContent = 'Generate'; S = m; render(); }
+  else if (m.type === 'rows' || m.type === 'file') { const r = pending.get(m.id); pending.delete(m.id); r && r(m); }
+  else if (m.type === 'error') { running = false; $('go').disabled = false; $('go').textContent = 'Generate'; $('prog').hidden = true; $('st').textContent = 'error: ' + m.message; }
+}
+const HINT = { starter: 'Under a second. Safe everywhere.', full: 'Roughly 3 s per run, about 25 MB of CSV. Runs in a background thread.', large: 'About 1.1 million rows, roughly 15 s per run and 1 GB of memory. Turn verification off for speed.' };
+function run() {
+  const scale = $('scale').value; running = true; $('go').disabled = true; $('go').textContent = 'Generating...'; $('prog').hidden = false; $('cancel').hidden = false; $('pfill').style.width = '0'; $('pname').textContent = 'starting...'; $('st').textContent = '';
+  send({ type: 'run', params: { ...W.PRESETS[scale], seed: +$('seed').value }, verify: $('verify').checked });
+}
+$('cancel').onclick = () => { if (worker) { worker.terminate(); worker = null; } running = false; S = null; $('prog').hidden = true; $('go').disabled = false; $('go').textContent = 'Generate'; $('st').textContent = 'cancelled'; };
+$('scale').onchange = () => { $('hint').textContent = HINT[$('scale').value]; $('verify').checked = $('scale').value !== 'large'; }; $('hint').textContent = HINT.starter;
+
+function heat(canvas, k) {
+  const H = S.heat, aisles = H.reduce((a, r) => Math.max(a, r[0]), 1), cs = 10, g = 1, bw = 3 * (cs + g) + 8; canvas.width = aisles * bw + 4; canvas.height = 20 * (cs + g) + 4;
+  const ctx = canvas.getContext('2d'), max = Math.log(1 + H.reduce((a, r) => Math.max(a, r[3], r[4]), 0)), ramp = t => t > .75 ? '#9d2f00' : t > .5 ? '#e08a00' : t > .25 ? '#ffd166' : '#b9c6d0';
+  H.forEach(r => { const n = r[k]; ctx.fillStyle = n < 0 ? 'rgba(130,140,150,.2)' : ramp(Math.log(1 + n) / max); ctx.fillRect(2 + (r[0] - 1) * bw + (r[2] - 1) * (cs + g), 2 + (r[1] - 1) * (cs + g), cs, cs); });
+}
 const ISSUE = {
   SKU_EXCEEDS_LOCATION_CAPACITY: ['Too big for the slot', 'Length, width, height or weight is above what the location allows.'],
   INCOMPATIBLE_COLOCATED: ['Wrong zone', 'Hazard or cold goods sitting outside their own zone type.'],
@@ -293,52 +348,38 @@ const ISSUE = {
   PICK_USES_BLOCKED_AISLE: ['Blocked aisle', 'A pick was routed through an aisle closed that day.'],
   REPLEN_EXCEEDS_LABOR_CAPACITY: ['Replenishment overload', 'One warehouse day needs more replenishment minutes than its labor capacity.'],
 };
-let CUR = null, tab = 'Warehouse';
-function preview() {
-  const t = tab, f = W.fields(t).slice(0, 8), rows = CUR.db[t].slice(0, 8);
-  put('prev', table(f, rows.map(r => f.map(k => r[k])), 99)); $('prevn').textContent = `${t}: showing 8 of ${fmt(CUR.db[t].length)} rows, ${f.length} of ${W.fields(t).length} columns`;
-  [...$('tabs').children].forEach(b => b.setAttribute('aria-pressed', b.textContent === t));
+async function loadPage() {   // only one page of rows ever reaches the UI thread
+  const r = await ask({ type: 'rows', table: tab, offset: page * PAGE, limit: PAGE }), f = r.fields;
+  put('prev', table(f, r.rows.map(x => f.map(k => x[k])), 99));
+  $('pinfo').textContent = `${tab}: rows ${r.total ? page * PAGE + 1 : 0}-${Math.min(r.total, (page + 1) * PAGE)} of ${fmt(r.total)}`;
+  $('pPrev').disabled = page === 0; $('pNext').disabled = (page + 1) * PAGE >= r.total; [...$('tabs').children].forEach(b => b.setAttribute('aria-pressed', b.textContent === tab));
 }
-function run() {
-  $('st').textContent = 'generating...';
-  setTimeout(() => {   // let the label paint before the synchronous work
-    try {
-      const p = { ...W.PRESETS[$('scale').value], seed: +$('seed').value };
-      const t0 = performance.now(), A = W.gen(p), B = W.gen(p), ms = Math.round(performance.now() - t0); CUR = A;
-      const csv = {}, same = W.TABLES.every(t => (csv[t] = W.toCSV(A.db, t)) === W.toCSV(B.db, t));
-      $('results').hidden = false; $('st').textContent = `done in ${ms} ms (two runs)`; $('rscale').textContent = `/ ${$('scale').value}`;
-      const m = A.metrics, b = m.baseline, o = m.optimized, d = m.delta_pct, q = A.report.detection, bad = [...A.report.validation_clean, ...A.report.validation].filter(c => !c.ok);
-      const det = W.detect(A.db), byType = {}; det.forEach(x => byType[x.issue_type] = (byType[x.issue_type] || 0) + 1);
+$('pPrev').onclick = () => { page--; loadPage(); }; $('pNext').onclick = () => { page++; loadPage(); };
+async function save(btn, msg) { const old = btn.textContent; btn.textContent = 'preparing...'; btn.disabled = true; const f = await ask(msg); download(f.name, f.text, f.mime); btn.textContent = old; btn.disabled = false; }
 
-      const S = [[d.distance, 1, '%', 'pick distance', d.distance < 0, v => (v > 0 ? '+' : '') + v.toFixed(1) + '%'], [d.throughput, 1, '%', 'lines per labor hour', d.throughput > 0], [d.replen_labor, 1, '%', 'replenishment labor', d.replen_labor < 0], [q.true_positive, 0, ` / ${q.expected}`, 'injected issues detected', q.false_positive + q.false_negative === 0], [bad.length, 0, '', 'validation failures', !bad.length]];
-      put('stats', ...S.map(([v, dec, suf, lab, good], i) => { const c = el('div', null, 'card stat rv in' + (good ? ' good' : '')), n = el('b', '0'); c.append(n, el('span', lab)); countUp(n, v, dec, suf, i < 3 && v > 0 ? '+' : ''); return c; }));
-
-      const row = (name, bv, ov, dk) => { const mx = Math.max(bv, ov), w = el('div'), nm = el('div', null, 'nm'); nm.append(el('b', name), el('span', d[dk] != null ? sign(d[dk]) : '')); w.append(nm);
-        [['base', bv, 'b'], ['opt', ov, 'o']].forEach(([lab, v, c]) => { const t = el('div', null, 'trk ' + c), bar = el('div', null, 'bar'), i = el('i'); bar.append(i); t.append(el('span', lab === 'base' ? 'Baseline' : 'Optimized'), bar, el('em', fmt(v))); i.dataset.w = v / mx * 100; w.append(t); }); return w; };
-      put('cmp', row('Total pick distance (m)', b.total_pick_distance_m, o.total_pick_distance_m, 'distance'), row('Distance, class-A SKUs (m avg)', b.avg_distance_class_A_m, o.avg_distance_class_A_m, 'class_A_distance'), row('Replenishment labor (min)', b.replen_labor_min, o.replen_labor_min, 'replen_labor'), row('Lines per labor hour', b.lines_per_labor_hour, o.lines_per_labor_hour, 'throughput'));
-      const mx = Math.max(...m.monthly_lines), pk = new Set([2, 8, 9]);
-      put('bars', ...m.monthly_lines.map((v, i) => { const x = el('div', null, pk.has(i) ? 'pk' : ''); x.dataset.h = Math.max(2, v / mx * 100); x.title = fmt(v) + ' lines'; x.append(el('span', 'JFMAMJJASOND'[i])); return x; }));
-      put('metrics', table(['Metric', 'Baseline', 'Optimized'], [['Replenishment tasks', b.replen_tasks, o.replen_tasks], ['Peak-day replen / capacity', b.peak_day_labor_utilisation, o.peak_day_labor_utilisation], ['Avg distance per line (m)', b.avg_distance_per_line_m, o.avg_distance_per_line_m]]));
-      const grow = () => { document.querySelectorAll('#cmp i').forEach(i => i.style.width = (RM ? i.dataset.w : i.dataset.w * .98) + '%'); document.querySelectorAll('#bars div').forEach(x => x.style.height = x.dataset.h + '%'); };
-      requestAnimationFrame(() => setTimeout(grow, 120));
-
-      const wid = A.db.Warehouse[0].warehouse_id; $('heatsub').textContent = `${wid}, all zones. One cell per location, colored by order lines handled by the SKU in it.`;
-      heat($('h1'), A.db, wid, 'BASELINE'); heat($('h2'), A.db, wid, 'OPTIMIZED');
-
-      put('bento', ...Object.keys(ISSUE).map((k, i) => { const c = el('div', null, 'card rv in'), gts = A.db.GroundTruth.filter(g => g.issue_type === k), found = byType[k] || 0, ok = found === gts.length;
-        const pill = el('span', `${found} of ${gts.length} detected`, 'pill' + (ok ? '' : ' bad')); c.append(pill, el('h3', ISSUE[k][0]), el('p', ISSUE[k][1])); if (gts[0]) c.append(el('div', gts[0].note, 'ex')); return c; }));
-
-      put('rules', table(['Goods', 'Zone', 'Location size'], [['Oversized (>100 cm)', 'BULK', '100 x 200 x 100'], ['Flammable / corrosive', 'HAZMAT', '40-60 x 60 x 40-60'], ['Cold chain', 'COLD', '40-60 x 60 x 40-60'], ['Everything else', 'AMBIENT', '40-60 x 60 x 40-60']], 9));
-      put('repro', el('span', same ? `Two runs with seed ${p.seed} are identical in all ${W.TABLES.length} tables.` : 'MISMATCH between runs', same ? 'ok' : 'bad'));
-      put('tables', table(['Table', 'Rows', 'FNV-1a'], W.TABLES.map(t => [t === 'GroundTruth' ? 'ground_truth' : t, A.db[t].length, W.checksum(csv[t])])));
-      const dl = []; W.TABLES.forEach(t => { const x = el('button', t === 'GroundTruth' ? 'ground_truth.csv' : t + '.csv'); x.onclick = () => download((t === 'GroundTruth' ? 'ground_truth' : t) + '.csv', csv[t], 'text/csv'); dl.push(x); });
-      const sq = el('button', 'seed.sql'); sq.onclick = () => download('seed.sql', W.toSQL(A.db), 'text/plain'); dl.push(sq); put('dl', ...dl);
-      put('tabs', ...W.TABLES.map(t => { const x = el('button', t); x.onclick = () => { tab = t; preview(); }; return x; })); preview();
-      put('valid', el('p', bad.length ? `${bad.length} failing checks` : `All ${A.report.validation.length} checks pass on clean data and after injection. The detector flags ${A.report.detections_clean} rows on clean data.`, bad.length ? 'bad' : 'ok'), el('div', null, 'scroll'));
-      $('valid').lastChild.append(table(['Check', 'Violations'], A.report.validation.map(c => [(c.ok ? 'OK    ' : 'FAIL  ') + c.name, c.bad])));
-      document.querySelectorAll('#results .rv:not(.in)').forEach(watch);
-    } catch (e) { $('st').textContent = 'error: ' + e.message; }
-  }, 30);
+function render() {
+  const m = S.metrics, b = m.baseline, o = m.optimized, d = m.delta_pct, q = S.report.detection, bad = [...S.report.validation_clean, ...S.report.validation].filter(c => !c.ok), scale = $('scale').value;
+  $('results').hidden = false; $('st').textContent = `done in ${(S.ms / 1000).toFixed(1)} s`; $('rscale').textContent = '/ ' + scale;
+  const St = [[d.distance, 1, '%', 'pick distance', d.distance < 0], [d.throughput, 1, '%', 'lines per labor hour', d.throughput > 0], [d.replen_labor, 1, '%', 'replenishment labor', d.replen_labor < 0], [q.true_positive, 0, ` / ${q.expected}`, 'injected issues detected', q.false_positive + q.false_negative === 0], [bad.length, 0, '', 'validation failures', !bad.length]];
+  put('stats', ...St.map(([v, dec, suf, lab, good], i) => { const c = el('div', null, 'card stat rv in' + (good ? ' good' : '')), n = el('b', '0'); c.append(n, el('span', lab)); countUp(n, v, dec, suf, i < 3 && v > 0 ? '+' : ''); return c; }));
+  const row = (name, bv, ov, dk) => { const mx = Math.max(bv, ov), w = el('div'), nm = el('div', null, 'nm'); nm.append(el('b', name), el('span', d[dk] != null ? sign(d[dk]) : '')); w.append(nm);
+    [['Baseline', bv, 'b'], ['Optimized', ov, 'o']].forEach(([lab, v, c]) => { const t = el('div', null, 'trk ' + c), bar = el('div', null, 'bar'), i = el('i'); bar.append(i); t.append(el('span', lab), bar, el('em', fmt(v))); i.dataset.w = v / mx * 100; w.append(t); }); return w; };
+  put('cmp', row('Total pick distance (m)', b.total_pick_distance_m, o.total_pick_distance_m, 'distance'), row('Distance, class-A SKUs (m avg)', b.avg_distance_class_A_m, o.avg_distance_class_A_m, 'class_A_distance'), row('Replenishment labor (min)', b.replen_labor_min, o.replen_labor_min, 'replen_labor'), row('Lines per labor hour', b.lines_per_labor_hour, o.lines_per_labor_hour, 'throughput'));
+  const mx = Math.max(...m.monthly_lines), pk = new Set([2, 8, 9]);
+  put('bars', ...m.monthly_lines.map((v, i) => { const x = el('div', null, pk.has(i) ? 'pk' : ''); x.dataset.h = Math.max(2, v / mx * 100); x.title = fmt(v) + ' lines'; x.append(el('span', 'JFMAMJJASOND'[i])); return x; }));
+  put('metrics', table(['Metric', 'Baseline', 'Optimized'], [['Replenishment tasks', b.replen_tasks, o.replen_tasks], ['Peak-day replen / capacity', b.peak_day_labor_utilisation, o.peak_day_labor_utilisation], ['Avg distance per line (m)', b.avg_distance_per_line_m, o.avg_distance_per_line_m]]));
+  requestAnimationFrame(() => setTimeout(() => { document.querySelectorAll('#cmp i').forEach(i => i.style.width = i.dataset.w * .98 + '%'); document.querySelectorAll('#bars div').forEach(x => x.style.height = x.dataset.h + '%'); }, 120));
+  $('heatsub').textContent = `${S.wid}, all zones. One cell per location, colored by order lines handled by the SKU in it.`; heat($('h1'), 3); heat($('h2'), 4);
+  put('bento', ...Object.keys(ISSUE).map(k => { const c = el('div', null, 'card rv in'), gts = S.gt.filter(g => g.issue_type === k), found = S.byType[k] || 0; c.append(el('span', `${found} of ${gts.length} detected`, 'pill' + (found === gts.length ? '' : ' bad')), el('h3', ISSUE[k][0]), el('p', ISSUE[k][1])); if (gts[0]) c.append(el('div', gts[0].note, 'ex')); return c; }));
+  put('rules', table(['Goods', 'Zone', 'Location size'], [['Oversized (>100 cm)', 'BULK', '100 x 200 x 100'], ['Flammable / corrosive', 'HAZMAT', '40-60 x 60 x 40-60'], ['Cold chain', 'COLD', '40-60 x 60 x 40-60'], ['Everything else', 'AMBIENT', '40-60 x 60 x 40-60']], 9));
+  put('repro', el('span', S.same === null ? 'Reproducibility check skipped. Tick the box above to generate twice and compare.' : S.same ? `Two runs with seed ${S.params.seed} are identical in all ${W.TABLES.length} tables.` : 'MISMATCH between runs', S.same === false ? 'bad' : 'ok'));
+  put('tables', table(['Table', 'Rows', 'FNV-1a'], W.TABLES.map(t => [t === 'GroundTruth' ? 'ground_truth' : t, S.counts[t], S.sums[t]])));
+  const dl = W.TABLES.map(t => { const x = el('button', t === 'GroundTruth' ? 'ground_truth.csv' : t + '.csv'); x.onclick = () => save(x, { type: 'csv', table: t }); return x; });
+  const sq = el('button', 'seed.sql'); sq.onclick = () => save(sq, { type: 'sql' }); put('dl', ...dl, sq);
+  tab = 'Warehouse'; page = 0; put('tabs', ...W.TABLES.map(t => { const x = el('button', t); x.onclick = () => { tab = t; page = 0; loadPage(); }; return x; })); loadPage();
+  put('valid', el('p', bad.length ? `${bad.length} failing checks` : `All ${S.report.validation.length} checks pass on clean data and after injection. The detector flags ${S.report.detections_clean} rows on clean data.`, bad.length ? 'bad' : 'ok'), el('div', null, 'scroll'));
+  $('valid').lastChild.append(table(['Check', 'Violations'], S.report.validation.map(c => [(c.ok ? 'OK    ' : 'FAIL  ') + c.name, c.bad])));
+  document.querySelectorAll('#results .rv:not(.in)').forEach(watch);
 }
 $('go').onclick = run; $('seed').addEventListener('keydown', e => e.key === 'Enter' && run());
 run();   // open on a working state

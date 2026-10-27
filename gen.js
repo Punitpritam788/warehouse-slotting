@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Usage: node gen.js [--full|--starter] [--seed N] [--out dir] [--sql] [--json]
+// Usage: node gen.js [--full|--large|--starter] [--seed N] [--out dir] [--sql] [--json]
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const W = require('./engine.js'), D = require('./dict.js');
 const a = process.argv.slice(2), flag = f => a.includes(f), val = (f, d) => a.includes(f) ? a[a.indexOf(f) + 1] : d;
-const scale = flag('--full') ? 'full' : 'starter', p = { ...W.PRESETS[scale] };
+const scale = flag('--full') ? 'full' : flag('--large') ? 'large' : 'starter', p = { ...W.PRESETS[scale] };
 for (const k of ['seed', 'warehouses', 'locations', 'skus', 'lines', 'inject']) if (val('--' + k)) p[k] = +val('--' + k);
 const out = val('--out', path.join('data', scale));
 

@@ -1,6 +1,6 @@
 // Seeded generator + validator + anomaly detector. Runs unchanged in Node (gen.js) and the browser (index.html).
 (function (E) {
-  const W = typeof module !== 'undefined' ? require('./dict.js') : window.WS;
+  const W = typeof module !== 'undefined' ? require('./dict.js') : globalThis.WS;
   const { DICT, FKS, ORDER } = W;
   const pad = (n, w) => String(n).padStart(w, '0');
   const r1 = x => Math.round(x * 10) / 10, r2 = x => Math.round(x * 100) / 100;
@@ -18,6 +18,7 @@
 
   E.PRESETS = {
     full: { seed: 20261022, warehouses: 20, locations: 10000, skus: 5000, lines: 100000, inject: 10 },
+    large: { seed: 20261022, warehouses: 40, locations: 20000, skus: 10000, lines: 400000, inject: 10 },
     starter: { seed: 20261022, warehouses: 4, locations: 800, skus: 400, lines: 4000, inject: 2 },
   };
 
@@ -28,13 +29,15 @@
     return m;
   }
 
-  E.gen = function (p) {
+  E.gen = function (p, stage) {
+    stage = stage || function () {};
     const R = rng(p.seed), ri = (a, b) => a + Math.floor(R() * (b - a + 1)), rf = (a, b) => a + R() * (b - a), pick = a => a[Math.floor(R() * a.length)];
     const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
     const nW = p.warehouses, split = (t, i) => Math.floor(t / nW) + (i < t % nW ? 1 : 0);
     const db = {}; ORDER.forEach(t => db[t] = []); db.GroundTruth = [];
 
     // 1. Warehouse -> Zone -> Location (parents first)
+    stage('Warehouses, zones, locations');
     const wh = []; let zc = 0, lc = 0;
     for (let i = 0; i < nW; i++) {
       const w = { id: 'WH-' + pad(i + 1, 3), wi: i, locs: { AMBIENT: [], COLD: [], HAZMAT: [], BULK: [] }, skus: [], by: { AMBIENT: [], COLD: [], HAZMAT: [], BULK: [] } };
@@ -55,6 +58,7 @@
     }
 
     // 2. SKU (+ demand weight, seasonal flag; both internal, not exported)
+    stage('SKUs');
     let sc = 0; const CATS = { AMBIENT: ['Tools', 'Stationery', 'Toys', 'Kitchen', 'Apparel'], COLD: ['Dairy', 'Pharma', 'Frozen'], HAZMAT: ['Aerosols', 'Solvents', 'Batteries'], BULK: ['Furniture', 'Appliances', 'Pallet goods'] };
     wh.forEach((w, i) => {
       const n = split(p.skus, i), ranks = shuffle(Array.from({ length: n }, (_, k) => k + 1));
@@ -73,6 +77,7 @@
     });
 
     // 3. Orders / lines: Zipf demand per SKU, peak windows (3x volume, seasonal SKUs 6x)
+    stage('Orders and demand');
     const cumD = []; for (let d = 0, c = 0; d <= LAST_DAY; d++) cumD.push(c += isPeak(d) ? 3 : 1);
     const raw = [];
     wh.forEach((w, wi) => {
@@ -102,6 +107,7 @@
     });
 
     // 5. Slotting. BASELINE = velocity-blind random compatible fit; OPTIMIZED = hottest SKU -> nearest compatible fit.
+    stage('Slotting both layouts');
     const place = (w, order, scan) => {
       const used = new Set();
       for (const s of order) {
@@ -125,6 +131,7 @@
     const actual = (s, d) => d < RESLOT ? s.base : s.opt;
 
     // 6. PickEvent: location = slot in force on picked_at
+    stage('Pick events');
     recs.forEach(r => {
       const l = actual(r.sku, r.pd);
       r.pick = { pick_id: `PICK-${r.oid}-${pad(r.ln, 3)}`, order_line_id: r.olid, order_id: r.oid, sku_id: r.sku.id, warehouse_id: wh[r.wi].id, location_id: l.location_id, aisle_no: l.aisle_no, picked_at: iso(r.pd), quantity: r.qty, travel_distance_m: r1(2 * l.dock_distance_m), layout: r.pd < RESLOT ? 'BASELINE' : 'OPTIMIZED' };
@@ -132,6 +139,7 @@
     });
 
     // 7. Replenishment: refill-to-capacity when stock <= 25% of slot capacity (generic over any layout)
+    stage('Replenishment');
     const byDay = [...recs].sort((a, b) => a.pd - b.pd);
     const sim = locOf => {
       const st = new Map(), out = [];
@@ -162,6 +170,7 @@
     });
 
     // 9. Metrics (counterfactual: identical demand under each layout) -- computed before anomaly injection
+    stage('Metrics on both layouts');
     const metric = locOf => {
       const rep = sim(locOf); let dist = 0, distA = 0, nA = 0; const dl = new Map();
       recs.forEach(r => { const d = 2 * locOf(r.sku, r.pd).dock_distance_m; dist += d; if (r.sku.vel === 'A') { distA += d; nA++; } });
@@ -179,6 +188,7 @@
     const validation_clean = E.validate(db), detections_clean = E.detect(db);
 
     // 10. Labelled anomaly injection: always NEW rows, never edits to valid rows
+    stage('Edge cases and validation');
     const gt = (type, et, id, note) => db.GroundTruth.push({ issue_id: 'ISS-' + pad(db.GroundTruth.length + 1, 4), issue_type: type, entity_type: et, entity_id: id, note });
     const used = new Set(db.SlotAssignment.map(r => r.location_id)), K = p.inject, locById = new Map(db.Location.map(l => [l.location_id, l]));
     const inj = (s, l) => { used.add(l.location_id); return addSlot(s, l, 'OPTIMIZED', '2026-10-01', ''); };
@@ -279,4 +289,4 @@
   E.toSQL = db => W.toDDL() + '\n' + [...ORDER, 'GroundTruth'].map(t => { const rows = db[t], f = E.fields(t), lit = v => typeof v === 'number' ? v : `'${String(v).replace(/'/g, "''")}'`; let s = ''; for (let i = 0; i < rows.length; i += 500) s += `INSERT INTO ${t} (${f.join(',')}) VALUES\n` + rows.slice(i, i + 500).map(r => '(' + f.map(k => lit(r[k])).join(',') + ')').join(',\n') + ';\n'; return s; }).join('\n');
   E.checksum = s => { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(16).padStart(8, '0'); };
   E.TABLES = [...ORDER, 'GroundTruth'];
-})(typeof module !== 'undefined' ? module.exports : (window.WS = window.WS || {}));
+})(typeof module !== 'undefined' ? module.exports : (globalThis.WS = globalThis.WS || {}));

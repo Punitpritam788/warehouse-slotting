@@ -126,4 +126,4 @@
     const cols = E.DICT[t].f.map(([n, k, r]) => `  ${n} ${ty[k]}${r ? ' NOT NULL' : ''}${n === E.DICT[t].pk ? ' PRIMARY KEY' : ''}`);
     return `CREATE TABLE ${t} (\n${cols.concat(fk).join(',\n')}\n);`;
   }).join('\n\n') + '\n\nCREATE TABLE GroundTruth (issue_id TEXT PRIMARY KEY, issue_type TEXT, entity_type TEXT, entity_id TEXT, note TEXT);\n';
-})(typeof module !== 'undefined' ? module.exports : (window.WS = window.WS || {}));
+})(typeof module !== 'undefined' ? module.exports : (globalThis.WS = globalThis.WS || {}));
