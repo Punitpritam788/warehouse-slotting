@@ -84,7 +84,7 @@
       const mk = f => { let c = 0; return w.skus.map(s => c += f(s)); }, cN = mk(s => s.dw), cP = mk(s => s.dw * (s.seasonal ? 6 : 1));
       for (let rem = split(p.lines, wi); rem > 0;) {
         const day = bis(cumD, R() * cumD[cumD.length - 1]), c = isPeak(day) ? cP : cN, k = Math.min(ri(1, 5), rem), seen = new Set(), lines = [];
-        for (let a = 0; a < k; a++) { let s; for (let t = 0; t < 5; t++) { s = w.skus[bis(c, R() * c[c.length - 1])]; if (!seen.has(s)) break; } seen.add(s); lines.push({ sku: s, qty: 1 + Math.floor(R() * R() * 12) }); }
+        for (let a = 0; a < k; a++) { let s; for (let t = 0; t < 50; t++) { s = w.skus[bis(c, R() * c[c.length - 1])]; if (!seen.has(s)) break; } if (seen.has(s)) s = w.skus.find(x => !seen.has(x)); seen.add(s); lines.push({ sku: s, qty: 1 + Math.floor(R() * R() * 12) }); }
         raw.push({ wi, day, ship: day + ri(1, 3), lines }); rem -= k;
       }
     });
@@ -191,7 +191,7 @@
     stage('Edge cases and validation');
     const gt = (type, et, id, note) => db.GroundTruth.push({ issue_id: 'ISS-' + pad(db.GroundTruth.length + 1, 4), issue_type: type, entity_type: et, entity_id: id, note });
     const used = new Set(db.SlotAssignment.map(r => r.location_id)), K = p.inject, locById = new Map(db.Location.map(l => [l.location_id, l]));
-    const inj = (s, l) => { used.add(l.location_id); return addSlot(s, l, 'OPTIMIZED', '2026-10-01', ''); };
+    const injFrom = () => iso(273 + ri(0, 20)), inj = (s, l) => { used.add(l.location_id); return addSlot(s, l, 'OPTIMIZED', injFrom(), ''); };   // random Oct start so injected rows carry no date tell
     for (let k = 0, t = 0; k < K && t < 9000; t++) {            // 1: does not fit
       const w = pick(wh), s = pick(w.by.AMBIENT), l = pick(w.locs.AMBIENT);
       if (!s || used.has(l.location_id) || fits(s, l)) continue;
@@ -207,13 +207,13 @@
     for (let k = 0, t = 0; k < K && t < 9000; t++) {            // 3: second SKU on an occupied location
       const o2 = pick(optSlots), l = locById.get(o2.location_id), a = skuById.get(o2.sku_id), s = pick(wh[a.wi].by[a.zt]);
       if (s === a || !fits(s, l) || dupDone.has(l.location_id)) continue;
-      dupDone.add(l.location_id); const r = addSlot(s, l, 'OPTIMIZED', '2026-10-01', ''); k++;
+      dupDone.add(l.location_id); const r = addSlot(s, l, 'OPTIMIZED', injFrom(), ''); k++;
       gt('DUPLICATE_ACTIVE_LOCATION', 'SlotAssignment', r.slot_id, `${l.location_id} already ACTIVE for ${a.id} (${o2.slot_id}); ${s.id} also assigned. Expected: reject later slot`);
     }
     const singles = shuffle([...pk].filter(([, v]) => v.length === 1));
     for (let k = 0; k < K && k < singles.length; k++) {         // 4: block a day on which exactly one pick used the aisle
       const [key, [pe]] = singles[k], [wi, aisle, day] = key.split('|').map(Number);
-      const blk = addBlock(wi, aisle, day, day, 'RACK_DAMAGE');
+      const blk = addBlock(wi, aisle, day, day, pick(['MAINTENANCE', 'SPILL', 'RACK_DAMAGE']));
       gt('PICK_USES_BLOCKED_AISLE', 'PickEvent', pe.pick_id, `Aisle ${aisle} of ${wh[wi].id} blocked on ${iso(day)} (${blk.block_id}) but pick routed through it. Expected: re-route`);
     }
     const doneWD = new Set();
@@ -271,6 +271,7 @@
     chk('SKUProfile: no cold+hazard mix', db.SKUProfile, p => !(p.temp_class === 'COLD' && p.hazard_class !== 'NONE'));
     const ol = new Map(); db.OrderLine.forEach(l => { const o = ol.get(l.order_id) || ol.set(l.order_id, { n: 0, u: 0 }).get(l.order_id); o.n++; o.u += l.quantity; });
     chk('Order: totals reconcile with lines; ship >= order date', db.Order, o => { const x = ol.get(o.order_id) || { n: 0, u: 0 }; return x.n === o.total_lines && x.u === o.total_units && o.shipped_date >= o.order_date; });
+    { const k = new Set(); let bad = 0, ex; db.OrderLine.forEach(l => { const x = l.order_id + '|' + l.sku_id; k.has(x) ? (bad++, ex = ex || l.order_line_id) : k.add(x); }); add('OrderLine: no SKU repeated within an order', bad, ex); }
     chk('OrderLine: SKU home warehouse = order warehouse', db.OrderLine, l => map.SKU.get(l.sku_id).home_warehouse_id === map.Order.get(l.order_id).warehouse_id);
     const slots = new Map(); db.SlotAssignment.forEach(s => (slots.get(s.sku_id) || slots.set(s.sku_id, []).get(s.sku_id)).push(s));
     const inForce = (sku, loc, d) => (slots.get(sku) || []).filter(s => s.location_id === loc && s.effective_from <= d && (s.effective_to || '9999') >= d);

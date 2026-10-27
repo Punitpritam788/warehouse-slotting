@@ -29,7 +29,7 @@ Seeded synthetic warehouse data, velocity-based slotting, validation, labelled e
 
 ## ✨ Highlights
 
-| 🚚 **-46.6%** | 📦 **+15.1%** | ✅ **0** | 🎯 **50 / 50** | 🔁 **100%** |
+| 🚚 **-47.3%** | 📦 **+14.8%** | ✅ **0** | 🎯 **50 / 50** | 🔁 **100%** |
 |:---:|:---:|:---:|:---:|:---:|
 | pick distance | lines per labor hour | validation failures | injected issues found | same-seed reproducible |
 
@@ -65,19 +65,19 @@ Full scale, seed 20261022 (from `data/full/manifest.json`). Both layouts are rep
 
 | Metric | Baseline (random compatible fit) | Optimized (velocity ranked, nearest fit) | Change |
 |---|---:|---:|---:|
-| Total pick distance (m) | 4,824,659 | 2,576,864 | **-46.6%** |
-| Avg distance per line (m) | 48.25 | 25.77 | -46.6% |
-| Avg distance, class-A SKUs (m) | 48.44 | 22.01 | -54.6% |
-| Replenishment tasks | 39,820 | 40,409 | +1.5% |
-| Replenishment labor (min) | 273,660 | 253,543 | -7.4% |
-| Peak-day replen labor / capacity | 1.07 | 0.97 | |
-| Lines per labor hour | 15.36 | 17.68 | **+15.1%** |
+| Total pick distance (m) | 4,892,814 | 2,578,170 | **-47.3%** |
+| Avg distance per line (m) | 48.93 | 25.78 | -47.3% |
+| Avg distance, class-A SKUs (m) | 49.18 | 22.00 | -55.3% |
+| Replenishment tasks | 39,471 | 40,445 | +2.5% |
+| Replenishment labor (min) | 271,860 | 253,739 | -6.7% |
+| Peak-day replen labor / capacity | 1.11 | 1.31 | |
+| Lines per labor hour | 15.39 | 17.67 | **+14.8%** |
 
-Reading it: putting fast movers near the dock cuts walking by almost half. Replenishment task count is flat (slot capacity, not location, drives it) but tasks get shorter, so labor drops a little and the peak day no longer exceeds capacity. Throughput assumptions: walking 1.2 m/s, 30 s handling per line, round trip to the dock.
+Reading it: putting fast movers near the dock cuts walking by almost half and lifts throughput by about 15%. Replenishment task count barely moves (slot capacity, not location, drives it) and total labor drops a little. The peak-day ratio is the least stable number: capacity is calibrated on the actual timeline (baseline until Jun 30, optimized after), so a replay of one layout over the whole year can land above or below 1.0 depending on the seed (here 1.11 baseline vs 1.31 optimized). Treat it as indicative, not as a result. Throughput assumes walking 1.2 m/s, 30 s handling per line, round trip to the dock.
 
 | Check | Result |
 |---|---|
-| Rows (full) | Warehouse 20 · Zone 80 · Location 10,000 · SKU 5,000 · SKUProfile 5,000 · Order 33,485 · OrderLine 100,000 · PickEvent 100,000 · Replenishment 39,392 · SlotAssignment 10,030 · AisleBlock 70 · ground truth 50 |
+| Rows (full) | Warehouse 20 · Zone 80 · Location 10,000 · SKU 5,000 · SKUProfile 5,000 · Order 33,505 · OrderLine 100,000 · PickEvent 100,000 · Replenishment 39,122 · SlotAssignment 10,030 · AisleBlock 70 · ground truth 50 |
 | Validation failures (clean data and after injection) | 0 |
 | Detector rows on clean data | 0 |
 | Injected edge cases vs detector | 50 expected, 50 found, 0 false positives, 0 false negatives |
@@ -167,9 +167,9 @@ Clean data is generated and validated first. Edge cases are then added as **new 
 <details>
 <summary><b>✅ Validation</b> (click to expand)</summary>
 
-`engine.js > validate` runs 50+ checks, all driven by `dict.js`:
+`engine.js > validate` runs 60+ checks, all driven by `dict.js`:
 
-- primary-key uniqueness for every table and foreign-key integrity for every relationship
+- primary-key uniqueness for every table and no repeated SKU within an order and foreign-key integrity for every relationship
 - required fields, types and allowed enum values
 - ID format for every table
 - date ordering (order <= pick <= shipped, slot start <= end, block start <= end)

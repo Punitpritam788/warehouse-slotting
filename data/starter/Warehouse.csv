@@ -1,5 +1,5 @@
 warehouse_id,name,status,labor_capacity_min_per_day,opened_date
-WH-001,Fulfilment Centre 1,ACTIVE,60,2020-03-01
-WH-002,Fulfilment Centre 2,ACTIVE,87,2017-06-01
-WH-003,Fulfilment Centre 3,ACTIVE,74,2021-09-01
-WH-004,Fulfilment Centre 4,ACTIVE,62,2015-03-01
+WH-001,Fulfilment Centre 1,ACTIVE,70,2020-03-01
+WH-002,Fulfilment Centre 2,ACTIVE,68,2017-06-01
+WH-003,Fulfilment Centre 3,ACTIVE,60,2021-09-01
+WH-004,Fulfilment Centre 4,ACTIVE,60,2015-03-01

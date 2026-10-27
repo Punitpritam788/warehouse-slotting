@@ -13,7 +13,7 @@
           const B = m.verify ? E.gen(p) : null;
           E.TABLES.forEach(t => { const a = E.toCSV(A.db, t); sums[t] = E.checksum(a); if (B) same = (same !== false) && a === E.toCSV(B.db, t); });
           const db = A.db, wid = db.Warehouse[0].warehouse_id, picks = new Map(db.SKUProfile.map(x => [x.sku_id, x.picks_total])), slot = { BASELINE: new Map(), OPTIMIZED: new Map() };
-          db.SlotAssignment.forEach(s => { if (s.warehouse_id === wid && s.effective_from !== '2026-10-01') slot[s.strategy].set(s.location_id, picks.get(s.sku_id)); });
+          db.SlotAssignment.forEach(s => { if (s.warehouse_id === wid && (s.strategy === 'BASELINE' || s.effective_from === '2026-07-01')) slot[s.strategy].set(s.location_id, picks.get(s.sku_id)); });
           const heat = db.Location.filter(l => l.warehouse_id === wid).map(l => [l.aisle_no, l.bay_no, l.level_no, slot.BASELINE.has(l.location_id) ? slot.BASELINE.get(l.location_id) : -1, slot.OPTIMIZED.has(l.location_id) ? slot.OPTIMIZED.get(l.location_id) : -1]);
           const mix = { AMBIENT: 0, COLD: 0, HAZMAT: 0, BULK: 0 }; db.SKUProfile.forEach(s => mix[s.oversized === 'Y' ? 'BULK' : s.hazard_class !== 'NONE' ? 'HAZMAT' : s.temp_class === 'COLD' ? 'COLD' : 'AMBIENT']++);
           const byType = {}; E.detect(db).forEach(x => byType[x.issue_type] = (byType[x.issue_type] || 0) + 1);

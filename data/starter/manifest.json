@@ -14,8 +14,8 @@
   "tables": {
     "Warehouse": {
       "rows": 4,
-      "fnv1a": "a3c99ed2",
-      "sha256": "7dcd25df49ddec42f2c81c65bbe9df2009895ccaa05716035e4f8cce547b6abe"
+      "fnv1a": "db7a277b",
+      "sha256": "9acca965b91bddd15590b31b02863eddb568637cc6b7c7e6ba632587625accb9"
     },
     "Zone": {
       "rows": 16,
@@ -34,43 +34,43 @@
     },
     "SKUProfile": {
       "rows": 400,
-      "fnv1a": "1e1db144",
-      "sha256": "3ec044efb573b9e10c80ad899307eb52ea00b940ccf56f76ed846a13879aa370"
+      "fnv1a": "68a761d1",
+      "sha256": "e7c6aaa31f6f8edca9a3081f31fc8de5cb4f58ce8c18011810e26e9f94c81da9"
     },
     "Order": {
-      "rows": 1333,
-      "fnv1a": "7c8aea30",
-      "sha256": "3d24ef628ff0bb2e966e4796c2d4d5565d83740aecfc569a92e4b1ab1633b85b"
+      "rows": 1335,
+      "fnv1a": "914a0d26",
+      "sha256": "fdae6a99151d8f7cadc27e2fa30ef1190943c10bf124239c31b7b939d63d2fbe"
     },
     "OrderLine": {
       "rows": 4000,
-      "fnv1a": "881adbe7",
-      "sha256": "73f7be904764c524d8a42daf28a37dbb34975321993ae994a9f361933001887d"
+      "fnv1a": "93019558",
+      "sha256": "32b9d96d46777f87e276c7b2578babd4430f62c82e6a8802d1368d5eabcea8da"
     },
     "PickEvent": {
       "rows": 4000,
-      "fnv1a": "91b749da",
-      "sha256": "640a6e4d5e980e0bd287fca5d1bae2774a124f2780a5009c910bec4578b5f634"
+      "fnv1a": "c5f3d00f",
+      "sha256": "22af17518a37a27842d3d50e5a5bbbb7ff3bbb2f09b067675896f853a584fd7b"
     },
     "Replenishment": {
-      "rows": 1548,
-      "fnv1a": "1619488d",
-      "sha256": "01292c4581f73acfecf946b88921c9b9c1488725bb41b16e08c36987f2641197"
+      "rows": 1543,
+      "fnv1a": "507e0392",
+      "sha256": "616028015b83697b4c2df752b951501d2e1a798b2f82b760f53427c57fa871a4"
     },
     "SlotAssignment": {
       "rows": 806,
-      "fnv1a": "272d5af8",
-      "sha256": "0b2001452e8538f975fb59ba2d7e4164e5b992bfc4adbcd55a372b0b19efffa7"
+      "fnv1a": "b47774b5",
+      "sha256": "cb6eca2f756e84167e8399460ac25c7e7b83fe6285f1fb7cc380183c4ad2add3"
     },
     "AisleBlock": {
       "rows": 14,
-      "fnv1a": "8b80e02f",
-      "sha256": "2f6558af530dc67469858c18ddd15ccacff3b6260034fb0e80ecf0aadd4ae0bb"
+      "fnv1a": "25e0dff7",
+      "sha256": "a57973bc7ec6cae81267f69811be6dd8119d5900ac7c75b85fb6d7f56fb37325"
     },
     "GroundTruth": {
       "rows": 10,
-      "fnv1a": "58f1373a",
-      "sha256": "6f2e2d1f09dd5f64f969b1be871ba1923386d7fdb6201899272695d9dedfdbbc"
+      "fnv1a": "037261a2",
+      "sha256": "2be68704c4ea552335bd1278168b6c69a67306930e80213dcabaac6befe009b1"
     }
   },
   "reproducibility": {
@@ -411,6 +411,12 @@
       },
       {
         "name": "Order: totals reconcile with lines; ship >= order date",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
+        "name": "OrderLine: no SKU repeated within an order",
         "bad": 0,
         "ok": true,
         "example": ""
@@ -797,6 +803,12 @@
         "example": ""
       },
       {
+        "name": "OrderLine: no SKU repeated within an order",
+        "bad": 0,
+        "ok": true,
+        "example": ""
+      },
+      {
         "name": "OrderLine: SKU home warehouse = order warehouse",
         "bad": 0,
         "ok": true,
@@ -850,51 +862,51 @@
   "metrics": {
     "baseline": {
       "pick_lines": 4000,
-      "total_pick_distance_m": 131740,
-      "avg_distance_per_line_m": 32.93,
-      "avg_distance_class_A_m": 32.86,
-      "replen_tasks": 1604,
-      "replen_labor_min": 10350,
-      "peak_day_labor_utilisation": 0.89,
-      "labor_hours": 236.33,
-      "lines_per_labor_hour": 16.93
+      "total_pick_distance_m": 141355,
+      "avg_distance_per_line_m": 35.34,
+      "avg_distance_class_A_m": 35.27,
+      "replen_tasks": 1589,
+      "replen_labor_min": 10321,
+      "peak_day_labor_utilisation": 1.06,
+      "labor_hours": 238.08,
+      "lines_per_labor_hour": 16.8
     },
     "optimized": {
       "pick_lines": 4000,
-      "total_pick_distance_m": 72635,
-      "avg_distance_per_line_m": 18.16,
-      "avg_distance_class_A_m": 15.24,
-      "replen_tasks": 1570,
-      "replen_labor_min": 9536,
-      "peak_day_labor_utilisation": 0.95,
-      "labor_hours": 209.08,
-      "lines_per_labor_hour": 19.13
+      "total_pick_distance_m": 72726,
+      "avg_distance_per_line_m": 18.18,
+      "avg_distance_class_A_m": 15.21,
+      "replen_tasks": 1568,
+      "replen_labor_min": 9515,
+      "peak_day_labor_utilisation": 0.81,
+      "labor_hours": 208.75,
+      "lines_per_labor_hour": 19.16
     },
     "assumptions": "walk 1.2 m/s, 30 s handling per line, round trip to dock, replen = 5 + 0.1*qty + 0.05*dock_m min",
     "delta_pct": {
-      "distance": -44.86,
-      "class_A_distance": -53.62,
-      "replen_tasks": -2.12,
-      "replen_labor": -7.86,
-      "throughput": 12.99
+      "distance": -48.55,
+      "class_A_distance": -56.88,
+      "replen_tasks": -1.32,
+      "replen_labor": -7.81,
+      "throughput": 14.05
     },
     "monthly_lines": [
-      243,
-      304,
-      589,
-      366,
-      337,
-      319,
-      350,
-      309,
-      667,
-      516,
+      255,
+      315,
+      584,
+      357,
+      339,
+      293,
+      359,
+      318,
+      666,
+      514,
       0,
       0
     ],
     "velocity_mix": {
-      "A": 159,
-      "B": 133,
+      "A": 160,
+      "B": 132,
       "C": 108
     }
   }
